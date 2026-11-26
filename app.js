@@ -1,5 +1,5 @@
 /**
- * M.E.C.O. (Módulo de Enlace Central Organizativo) — Aplicación Interactiva
+ * M.E.C.O. (Microkernel Extensible Controlador y Orquestador) — Aplicación Interactiva
  * Renderizado de Ramas de la Arquitectura de 3 Niveles, Simulador PAM y Catálogo Hub
  */
 
@@ -1212,6 +1212,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
       tab.classList.add("active");
       const targetId = tab.dataset.tab;
+      document.getElementById(targetId)?.classList.add("active");
+    });
+  });
+
+  // 4.1 meco.docs Tab Switching
+  document.querySelectorAll(".docs-tab-btn").forEach(tab => {
+    tab.addEventListener("click", () => {
+      document.querySelectorAll(".docs-tab-btn").forEach(t => t.classList.remove("active"));
+      document.querySelectorAll(".docs-pane").forEach(p => p.classList.remove("active"));
+
+      tab.classList.add("active");
+      const targetId = tab.dataset.docstab;
       document.getElementById(targetId)?.classList.add("active");
     });
   });

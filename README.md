@@ -1,6 +1,6 @@
 # 🛡️ M.E.C.O. — Portal Web Oficial y Showcase Interactivo
 
-Sitio web oficial interactivo y showcase de arquitectura para **M.E.C.O.** (*Módulo de Enlace Central Organizativo* // Microkernel Soberano de 3 Niveles).
+Sitio web oficial interactivo y showcase de arquitectura para **M.E.C.O.** (*Microkernel Extensible Controlador y Orquestador* // Arquitectura Soberana de 3 Niveles).
 
 [![GitHub Pages](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-emerald.svg)](https://eduardiker.github.io/meco/)
 [![Architecture](https://img.shields.io/badge/Architecture-3--Tier%20(Core%20%7C%20PAM--CAM%20%7C%20Plugins)-sky.svg)](https://github.com/Eduardiker/meco-core)
@@ -28,14 +28,19 @@ El sitio web está alojado y publicado mediante **GitHub Pages** en:
    - Inspector lateral interactivo con especificaciones técnicas, comandos de terminal y fragmentos de código por cada nodo.
 
 2. **⚡ Simulador de Terminal y Motor PAM en Tiempo Real:**
-   - Permite probar comandos en directo (`/estado`, `/seguridad`, `/homelab`, `/offline`, `/schematic`, `/ayuda`).
+   - Permite probar comandos en directo (`/estado`, `/seguridad`, `/homelab`, `/offline`, `/schematic`, `/ayuda`) con prompt `iker@homelab:~$`.
    - Conmutador en vivo entre los 4 perfiles de respuesta para observar cómo PAM adapta el mismo paquete de telemetría o delega en el modo esquemático ASCII puro.
 
-3. **🧩 Catálogo Completo de Plugins de Meco-Hub:**
+3. **🧩 Catálogo Oficial de Plugins y Matriz de Dependencias:**
    - Directorio de los **14 plugins oficiales** certificados con filtrado por categorías y búsqueda predictiva instantánea.
+   - Matriz interactiva de dependencias que desglosa qué módulos nativos (PAM / CAM) y permisos del Core requiere cada plugin.
    - Modal de inspección detallada con sumas criptográficas SHA-256, permisos de Nivel 1 requeridos y contratos de ejecución.
 
-4. **🛡️ Pilares de Resiliencia Militar:**
+4. **📖 meco.docs (Guía Técnica para Desarrolladores del Núcleo):**
+   - Documentación técnica exhaustiva para crear **Módulos Nativos del Sistema (Nivel 2)** en `meco-core/modules/`.
+   - Comparativa técnica Módulos vs Plugins, contrato de ciclo de vida (`initialize`, `start`, `status`, `shutdown`), guía paso a paso y plantilla boilerplate lista para usar.
+
+5. **🛡️ Pilares de Resiliencia Militar:**
    - Explicación interactiva del escudo canario inotify (<50ms), compactador glibc `malloc_trim(0)`, disyuntores automáticos y la malla UDP táctica fuera de banda ante corte total de fibra.
 
 ---

@@ -1,5 +1,5 @@
 /* ==============================================================================
-   M.E.C.O. (Módulo de Enlace Central Organizativo) — Estilos Oficiales
+   M.E.C.O. (Microkernel Extensible Controlador y Orquestador) — Estilos Oficiales
    Arquitectura Soberana de 3 Niveles (Core | PAM-CAM | Plugins Hub)
    ============================================================================== */
 
@@ -1336,4 +1336,156 @@ code, pre {
 .matrix-cross {
   color: var(--text-dim);
   font-size: 0.85rem;
+}
+
+/* ==============================================================================
+   MECO.DOCS: DOCUMENTACIÓN TÉCNICA Y GUÍA DE CREACIÓN DE MÓDULOS
+   ============================================================================== */
+.docs-section {
+  padding: 5rem 0;
+  background: linear-gradient(180deg, rgba(13, 18, 29, 0.6) 0%, rgba(7, 9, 14, 0.95) 100%);
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.docs-wrapper {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+.docs-navbar {
+  display: flex;
+  background: rgba(0, 0, 0, 0.4);
+  border-bottom: 1px solid var(--border-subtle);
+  overflow-x: auto;
+}
+
+.docs-tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 1rem 1.6rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: var(--transition);
+}
+
+.docs-tab-btn:hover {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.docs-tab-btn.active {
+  color: var(--accent-modules);
+  border-bottom-color: var(--accent-modules);
+  background: rgba(45, 212, 191, 0.06);
+}
+
+.docs-pane {
+  display: none;
+  padding: 2.25rem;
+}
+
+.docs-pane.active {
+  display: block;
+}
+
+.docs-lead {
+  font-size: 1.05rem;
+  color: var(--text-main);
+  line-height: 1.65;
+  margin-bottom: 1.5rem;
+}
+
+.docs-callout {
+  background: rgba(56, 189, 248, 0.08);
+  border-left: 3px solid var(--accent-core);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.docs-callout p {
+  font-size: 0.875rem;
+  color: #bae6fd;
+  line-height: 1.6;
+}
+
+.docs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+  margin: 1.5rem 0;
+}
+
+.docs-step-card {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+}
+
+.docs-step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(45, 212, 191, 0.2);
+  color: var(--accent-modules);
+  font-weight: 800;
+  font-size: 0.8rem;
+  font-family: var(--font-mono);
+  margin-bottom: 0.75rem;
+}
+
+.docs-step-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  color: var(--text-main);
+}
+
+.docs-step-desc {
+  font-size: 0.825rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+.docs-code-container {
+  position: relative;
+  background: #060910;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  margin: 1.25rem 0;
+  overflow-x: auto;
+}
+
+.docs-code-container pre {
+  font-family: var(--font-mono);
+  font-size: 0.825rem;
+  color: #e0f2fe;
+  line-height: 1.65;
+}
+
+.docs-badge-nav {
+  font-size: 0.68rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(45, 212, 191, 0.2);
+  color: var(--accent-modules);
+  border: 1px solid rgba(45, 212, 191, 0.35);
 }
