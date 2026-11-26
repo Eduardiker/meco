@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M.E.C.O. — Microkernel Soberano de 3 Niveles</title>
+  <meta name="description" content="Módulo de Enlace Central Organizativo: Microkernel modular para homelabs soberanos. Arquitectura en 3 niveles (Core, PAM/CAM, Plugins Hub), resiliencia táctica fuera de banda y privacidad absoluta.">
+  <meta name="author" content="Iker (@Eduardiker)">
+
+  <!-- Open Graph / Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="M.E.C.O. — Microkernel Soberano de 3 Niveles">
+  <meta property="og:description" content="Microkernel autonómico para homelabs y servidores soberanos. Arquitectura estricta de 3 niveles con PAM, CAM y Meco-Hub.">
+  <meta property="og:url" content="https://eduardiker.github.io/meco/">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232dd4bf'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="#" class="brand">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2dd4bf" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+        <span>M.E.C.O.</span>
+        <span class="brand-badge">v3.0.0</span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#ramas" class="nav-link">Arquitectura 3 Niveles</a>
+        <a href="#simulador" class="nav-link">Simulador PAM</a>
+        <a href="#plugins" class="nav-link">Plugins Hub (14)</a>
+        <a href="#pilares" class="nav-link">Resiliencia</a>
+        <a href="#despliegue" class="nav-link">Despliegue</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="https://github.com/Eduardiker/meco-core" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          meco-core
+        </a>
+        <a href="https://github.com/Eduardiker/meco-hub" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+          meco-hub &rarr;
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="hero-meta">
+        <span class="dot"></span>
+        <span>Módulo de Enlace Central Organizativo // Microkernel Soberano</span>
+      </div>
+
+      <h1 class="hero-title">
+        El Sistema Operativo Modular y Autonómico para Homelabs
+      </h1>
+
+      <p class="hero-subtitle">
+        Diseñado bajo principios innegociables de soberanía tecnológica, desacoplamiento estricto en 3 niveles, resiliencia táctica fuera de banda y privacidad absoluta.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="#ramas" class="btn btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="6" y1="3" x2="6" y2="15"></line>
+            <circle cx="18" cy="6" r="3"></circle>
+            <circle cx="6" cy="18" r="3"></circle>
+            <path d="M18 9a9 9 0 0 1-9 9"></path>
+          </svg>
+          Explorar Ramas Arquitectónicas
+        </a>
+        <a href="#simulador" class="btn btn-outline">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="4 17 10 11 4 5"></polyline>
+            <line x1="12" y1="19" x2="20" y2="19"></line>
+          </svg>
+          Simulador PAM Interactivo
+        </a>
+        <a href="#plugins" class="btn btn-outline">
+          Catálogo Hub (14 Plugins)
+        </a>
+      </div>
+
+      <!-- Quick Metrics Strip -->
+      <div class="stats-strip">
+        <div class="stat-item">
+          <span class="stat-value" style="color: var(--accent-core)">3 Niveles</span>
+          <span class="stat-label">Arquitectura TFG</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value" style="color: var(--accent-modules)">14 Módulos</span>
+          <span class="stat-label">Plugins Oficiales Hub</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value" style="color: var(--accent-emerald)">&lt; 50 ms</span>
+          <span class="stat-label">Escudo Canario Anti-Ransomware</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value" style="color: #cbd5e1">0% CPU</span>
+          <span class="stat-label">Malla P2P Emergencia en Espera</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 1: EL GRÁFICO DE RAMAS INTERACTIVO -->
+  <section id="ramas" class="branch-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Visualización de Arquitectura</span>
+        <h2 class="section-title">Las 3 Ramas de M.E.C.O.</h2>
+        <p class="section-desc">
+          Explora la separación estricta de autoridad, conectividad e interacción. Haz clic en cualquier nodo o rama para inspeccionar sus especificaciones técnicas y comandos.
+        </p>
+      </div>
+
+      <div class="tree-card">
+        <!-- Toolbar -->
+        <div class="tree-toolbar">
+          <div class="tree-legend">
+            <span class="legend-tag" onclick="selectBranchNode('root')">
+              <span class="legend-dot root"></span> Orquestador Root
+            </span>
+            <span class="legend-tag" onclick="selectBranchNode('tier1')">
+              <span class="legend-dot tier1"></span> Nivel 1: Microkernel Core
+            </span>
+            <span class="legend-tag" onclick="selectBranchNode('tier2')">
+              <span class="legend-dot tier2"></span> Nivel 2: PAM & CAM
+            </span>
+            <span class="legend-tag" onclick="selectBranchNode('tier3')">
+              <span class="legend-dot tier3"></span> Nivel 3: Plugins Hub
+            </span>
+          </div>
+
+          <div class="tree-filter-buttons">
+            <button class="filter-btn active" data-tier="all">Ver Todo</button>
+            <button class="filter-btn" data-tier="1">Solo Nivel 1 (Core)</button>
+            <button class="filter-btn" data-tier="2">Solo Nivel 2 (PAM/CAM)</button>
+            <button class="filter-btn" data-tier="3">Solo Nivel 3 (Hub)</button>
+          </div>
+        </div>
+
+        <!-- Workbench: SVG Tree + Inspector -->
+        <div class="tree-workbench">
+          <!-- Interactive SVG Tree -->
+          <div class="tree-canvas-container">
+            <svg id="branchSvg" viewBox="0 0 760 640" preserveAspectRatio="xMinYMin meet"></svg>
+          </div>
+
+          <!-- Inspector Side Panel -->
+          <aside class="tree-inspector" id="treeInspector">
+            <div class="inspector-header">
+              <span id="inspBadge" class="inspector-tier-badge badge-tier1">Núcleo Orquestador</span>
+              <h3 id="inspTitle" class="inspector-title">M.E.C.O. ROOT</h3>
+              <div id="inspPath" class="inspector-path">meco.py</div>
+            </div>
+
+            <div class="inspector-body">
+              <p id="inspDesc" class="inspector-desc">
+                Punto de entrada unificado y daemon de supervisión continua. Coordina el arranque del Microkernel de Nivel 1, orquesta los módulos de interacción y red de Nivel 2, y carga el ecosistema de plugins de Nivel 3.
+              </p>
+
+              <div id="inspSpecs" class="inspector-specs">
+                <!-- Dynamically populated -->
+              </div>
+
+              <div class="inspector-code-box" id="inspCode">
+# Arrancar MECO en modo servicio continuo
+python3 meco.py --daemon
+              </div>
+            </div>
+
+            <div class="inspector-actions">
+              <a href="#simulador" class="btn btn-outline btn-sm" style="width: 100%;">
+                Probar en Simulador &rarr;
+              </a>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: SIMULADOR INTERACTIVO DE TERMINAL Y PERFILES PAM -->
+  <section id="simulador" class="simulator-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Simulación en Tiempo Real</span>
+        <h2 class="section-title">Motor PAM y Modo Esquemático del Core</h2>
+        <p class="section-desc">
+          Observa cómo el motor <strong>ResponseAdapter</strong> de PAM transforma la telemetría del sistema en 4 perfiles distintos o delega en el Modo Esquemático Básico del Microkernel (Nivel 1).
+        </p>
+      </div>
+
+      <div class="terminal-card">
+        <!-- Terminal Header with Profile Switches -->
+        <div class="terminal-header">
+          <div class="terminal-buttons">
+            <span class="t-btn t-close"></span>
+            <span class="t-btn t-min"></span>
+            <span class="t-btn t-max"></span>
+          </div>
+
+          <span class="terminal-title">meco@homelab: ~ (meco.py --daemon)</span>
+
+          <!-- Mode Switcher -->
+          <div class="terminal-mode-switch">
+            <button class="mode-pill active" data-style="conversational">Conversacional</button>
+            <button class="mode-pill" data-style="concise">Conciso</button>
+            <button class="mode-pill" data-style="technical">Técnico</button>
+            <button class="mode-pill" data-style="schematic">Esquemático (Core)</button>
+          </div>
+        </div>
+
+        <!-- Terminal Output Area -->
+        <div class="terminal-body" id="terminalBody">
+          <!-- Dynamically populated via app.js -->
+        </div>
+
+        <!-- Quick Command Pills -->
+        <div class="terminal-quick-commands">
+          <span class="quick-label">Comandos Rápidos:</span>
+          <button class="cmd-badge" data-cmd="/estado">/estado</button>
+          <button class="cmd-badge" data-cmd="/seguridad">/seguridad</button>
+          <button class="cmd-badge" data-cmd="/homelab">/homelab</button>
+          <button class="cmd-badge" data-cmd="/offline">/offline (Corte Fibra)</button>
+          <button class="cmd-badge" data-cmd="/schematic">/schematic</button>
+          <button class="cmd-badge" data-cmd="/ayuda">/ayuda</button>
+          <button class="cmd-badge" data-cmd="clear" style="margin-left: auto;">Limpiar</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: CATÁLOGO OFICIAL DE PLUGINS (MECO-HUB) -->
+  <section id="plugins" class="plugins-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Nivel 3: Meco-Hub</span>
+        <h2 class="section-title">Catálogo Oficial de Plugins (14 Módulos)</h2>
+        <p class="section-desc">
+          Extensiones 100% desacopladas del Core bajo el estándar oficial de 2 bloques (<code>calls.py</code> ➔ <code>actions.py</code>). Cada plugin opera con un MecoContext aislado sujeto a la Autoridad de Permisos.
+        </p>
+      </div>
+
+      <!-- Filter and Search Bar -->
+      <div class="plugins-filter-bar">
+        <div class="filter-chips">
+          <button class="chip active" data-category="all">Todos (14)</button>
+          <button class="chip" data-category="critical">Críticos de Sistema</button>
+          <button class="chip" data-category="homelab">Operaciones Homelab</button>
+          <button class="chip" data-category="ai">IA y Finanzas</button>
+          <button class="chip" data-category="media">Multimedia & Mayordomo</button>
+          <button class="chip" data-category="network">Red y Notificaciones</button>
+        </div>
+
+        <div class="search-input-wrap">
+          <span class="search-icon">&#128269;</span>
+          <input type="text" id="pluginSearch" class="search-input" placeholder="Buscar módulo o capacidad...">
+        </div>
+      </div>
+
+      <!-- Plugins Grid -->
+      <div class="plugins-grid" id="pluginsGrid">
+        <!-- Rendered dynamically via app.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: PILARES DE SOBERANÍA Y RESILIENCIA TÁCTICA -->
+  <section id="pilares" class="deep-dive-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Diseño Militar y Táctico</span>
+        <h2 class="section-title">Pilares de Autopreservación</h2>
+        <p class="section-desc">
+          M.E.C.O. no asume un entorno ideal. Está diseñado para sobrevivir a caídas de red, ataques de ransomware en SMB, agotamiento de memoria y fallos en cascada.
+        </p>
+      </div>
+
+      <div class="pillars-grid">
+        <div class="pillar-card">
+          <div class="pillar-icon" style="color: var(--accent-core);">&#128274;</div>
+          <h3 class="pillar-title">Instancia Única & Autovacuna RAM</h3>
+          <p class="pillar-text">
+            Bloqueo por socket exclusivo en <code>127.0.0.1:48899</code> para evitar instancias zombies. Recolección de basura periódica con <code>libc.malloc_trim(0)</code> manteniendo el consumo RSS estabilizado entre 45 MB y 65 MB.
+          </p>
+        </div>
+
+        <div class="pillar-card">
+          <div class="pillar-icon" style="color: var(--accent-emerald);">&#9889;</div>
+          <h3 class="pillar-title">Circuit Breakers por Plugin</h3>
+          <p class="pillar-text">
+            Si una API externa o base de datos falla 5 veces consecutivas en 60 segundos, su disyuntor se abre (<code>CIRCUIT_OPEN</code>), aislando el fallo y evitando que bloquee el microkernel o los hilos de interacción.
+          </p>
+        </div>
+
+        <div class="pillar-card">
+          <div class="pillar-icon" style="color: var(--accent-rose);">&#128737;</div>
+          <h3 class="pillar-title">Escudo Canario inotify & FIM</h3>
+          <p class="pillar-text">
+            Trampas canario en carpetas compartidas SMB monitorizadas mediante inotify a nivel de kernel. Si un ransomware toca el fichero canario, el sistema activa el Modo Búnker en menos de 50 milisegundos cortando accesos.
+          </p>
+        </div>
+
+        <div class="pillar-card">
+          <div class="pillar-icon" style="color: var(--accent-amber);">&#128225;</div>
+          <h3 class="pillar-title">Malla UDP Táctica Fuera de Banda</h3>
+          <p class="pillar-text">
+            Ante la caída total de la fibra óptica o pérdida de pasarelas en la nube, el plugin de supervivencia P2P despierta un socket UDP táctico con balizas cifradas HMAC sin consumir ciclos de CPU en reposo.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: DESPLIEGUE RÁPIDO -->
+  <section id="despliegue" class="quickstart-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Puesta en Marcha</span>
+        <h2 class="section-title">Despliegue Rápido de M.E.C.O.</h2>
+        <p class="section-desc">
+          Instala el microkernel soberano en cualquier servidor o Mini-PC con Linux (Ubuntu, Debian, Alpine) y Python 3.10+.
+        </p>
+      </div>
+
+      <div class="quickstart-box">
+        <div class="tab-nav">
+          <button class="tab-btn active" data-tab="tab-cli">1. Línea de Comandos (CLI)</button>
+          <button class="tab-btn" data-tab="tab-systemd">2. Servicio Systemd</button>
+          <button class="tab-btn" data-tab="tab-yaml">3. Configuración YAML</button>
+        </div>
+
+        <!-- Tab 1: CLI -->
+        <div class="tab-content active" id="tab-cli">
+          <div class="code-block-wrap">
+            <button class="copy-btn" data-copy-target="#codeCli">Copiar</button>
+            <pre><code id="codeCli"># 1. Clonar el repositorio del Microkernel Core
+git clone https://github.com/Eduardiker/meco-core.git meco
+cd meco
+
+# 2. Configurar perfil de inicio
+cp config/meco.example.yaml config/meco.yaml
+
+# 3. Consultar estado en Modo Conversacional (vía PAM)
+python3 meco.py --cmd "/estado"
+
+# 4. Modo Esquemático Básico del Core (Rescate Nivel 1)
+python3 meco.py --schematic --cmd "status"
+
+# 5. Sincronizar catálogo oficial desde meco-hub
+python3 meco.py --sync-hub ../meco-hub --cmd "/ayuda"
+
+# 6. Arrancar como servicio / daemon continuo
+python3 meco.py --daemon</code></pre>
+          </div>
+        </div>
+
+        <!-- Tab 2: Systemd -->
+        <div class="tab-content" id="tab-systemd">
+          <div class="code-block-wrap">
+            <button class="copy-btn" data-copy-target="#codeSystemd">Copiar</button>
+            <pre><code id="codeSystemd"># Guardar en /etc/systemd/system/meco.service
+[Unit]
+Description=M.E.C.O. Autonomous Sovereign Microkernel
+After=network.target docker.service
+
+[Service]
+Type=simple
+User=irt
+WorkingDirectory=/opt/meco
+ExecStart=/usr/bin/python3 /opt/meco/meco.py --daemon
+Restart=always
+RestartSec=5
+MemoryMax=250M
+
+[Install]
+WantedBy=multi-user.target</code></pre>
+          </div>
+        </div>
+
+        <!-- Tab 3: YAML -->
+        <div class="tab-content" id="tab-yaml">
+          <div class="code-block-wrap">
+            <button class="copy-btn" data-copy-target="#codeYaml">Copiar</button>
+            <pre><code id="codeYaml"># config/meco.yaml — Arquitectura de 3 Niveles
+admin:
+  name: "Iker"
+  allowed_telegram_ids: [123456789]
+  language: "es"
+
+core:
+  schematic_mode: false
+  permissions:
+    default_policy: "strict"
+
+modules:
+  pam:
+    default_style: "conversational" # conversational | concise | technical | schematic
+  cam:
+    offline_mode: false
+    default_timeout_s: 10.0
+
+plugins:
+  hub_repo: "Eduardiker/meco-hub"</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Plugin Inspector Modal -->
+  <div class="modal-overlay" id="pluginModal">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closePluginModal()">&times;</button>
+      <div style="margin-bottom: 1.25rem;">
+        <span id="modalPluginBadge" class="plugin-badge-pill pill-official">Oficial</span>
+        <h2 id="modalPluginTitle" style="margin-top: 0.5rem; font-size: 1.4rem;">Plugin</h2>
+        <div id="modalPluginPath" style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim);">path</div>
+      </div>
+
+      <p id="modalPluginDesc" style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem; line-height: 1.6;"></p>
+
+      <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 1rem; margin-bottom: 1.25rem; font-size: 0.825rem;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.4rem;">
+          <span style="color: var(--text-dim)">Autor:</span>
+          <span id="modalPluginAuthor" style="font-family: var(--font-mono); color: var(--text-main);"></span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 0.4rem;">
+          <span style="color: var(--text-dim)">SHA-256 (Verificación Hub):</span>
+          <span id="modalPluginSha" style="font-family: var(--font-mono); color: #6ee7b7; font-size: 0.72rem; word-break: break-all;"></span>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 1.25rem;">
+        <h4 style="font-size: 0.85rem; text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.5rem;">Permisos Evaluados por Nivel 1 (Core):</h4>
+        <div id="modalPluginPerms"></div>
+      </div>
+
+      <div style="margin-bottom: 1.5rem;">
+        <h4 style="font-size: 0.85rem; text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.5rem;">Comandos Registrados en calls.py:</h4>
+        <div id="modalPluginCommands"></div>
+      </div>
+
+      <button class="btn btn-primary btn-sm" onclick="closePluginModal()" style="width: 100%;">
+        Cerrar Inspector
+      </button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="brand">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2dd4bf" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+            <span>M.E.C.O.</span>
+          </div>
+          <p class="footer-brand-desc">
+            Módulo de Enlace Central Organizativo — Microkernel modular autonómico de 3 niveles desarrollado para homelabs soberanos.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Ecosistema</h4>
+          <ul class="footer-links">
+            <li><a href="https://github.com/Eduardiker/meco-core" target="_blank">Repositorio meco-core</a></li>
+            <li><a href="https://github.com/Eduardiker/meco-hub" target="_blank">Catálogo meco-hub</a></li>
+            <li><a href="https://github.com/Eduardiker/meco" target="_blank">Sitio Web meco (GitHub Pages)</a></li>
+            <li><a href="https://github.com/Eduardiker" target="_blank">Perfil @Eduardiker</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-col-title">Arquitectura</h4>
+          <ul class="footer-links">
+            <li><a href="#ramas">Nivel 1: Microkernel Core</a></li>
+            <li><a href="#ramas">Nivel 2: Módulos PAM y CAM</a></li>
+            <li><a href="#plugins">Nivel 3: Plugins Desacoplados</a></li>
+            <li><a href="#simulador">Modo Esquemático Básico</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 M.E.C.O. — Proyecto de Iker (@Eduardiker). Licencia MIT.</div>
+        <div>Alojado en GitHub Pages • https://eduardiker.github.io/meco/</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
