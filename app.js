@@ -216,7 +216,7 @@ bus.publish("security:canary_tripped", {"path": "/shared/docs"}, priority=1)`
     id: "tier3",
     tier: 3,
     title: "NIVEL 3: Plugins Hub",
-    subtitle: "meco-hub (14 Módulos)",
+    subtitle: "meco-hub (14 Plugins Desacoplados)",
     path: "plugins/",
     badge: "Nivel 3: Ecosistema Desacoplado",
     desc: "Catálogo completo de extensiones modulares alojadas en meco-hub. Todos los plugins siguen el estándar estricto de dos bloques (calls.py para interfaz y actions.py para lógica), operando bajo el contexto aislado del Core.",
@@ -238,7 +238,7 @@ plugins/<nombre_plugin>/
     id: "hub_security",
     tier: 3,
     parent: "tier3",
-    title: "Security Sentinel",
+    title: "Sentinel",
     subtitle: "plugins/security_sentinel",
     path: "plugins/security_sentinel",
     badge: "Nivel 3: Seguridad Crítica",
@@ -272,7 +272,7 @@ sentinel.actions.trigger_bunker_mode(reason="canary_compromised")`
     id: "hub_emergency",
     tier: 3,
     parent: "tier3",
-    title: "Emergency P2P Mesh",
+    title: "Emergency P2P",
     subtitle: "plugins/emergency_p2p",
     path: "plugins/emergency_p2p",
     badge: "Nivel 3: Resiliencia Táctica",
@@ -289,7 +289,7 @@ sentinel.actions.trigger_bunker_mode(reason="canary_compromised")`
     id: "hub_telegram",
     tier: 3,
     parent: "tier3",
-    title: "Telegram Gateway",
+    title: "Telegram",
     subtitle: "plugins/telegram",
     path: "plugins/telegram",
     badge: "Nivel 3: Interfaz Soberana",
@@ -310,7 +310,7 @@ calls.register_commands() -> {"/estado", "/seguridad", "/compras", "/temperatura
 const MECO_PLUGINS = [
   {
     id: "security_sentinel",
-    name: "Security Sentinel & Canary Shield",
+    name: "Sentinel",
     version: "2.0.0",
     category: "critical",
     critical: true,
@@ -330,7 +330,7 @@ const MECO_PLUGINS = [
   },
   {
     id: "homelab_ops",
-    name: "Homelab Ops & Docker Proxy",
+    name: "Homelab Ops",
     version: "2.0.0",
     category: "critical",
     critical: true,
@@ -350,7 +350,7 @@ const MECO_PLUGINS = [
   },
   {
     id: "emergency_p2p",
-    name: "Emergency P2P Survival Mesh",
+    name: "Emergency P2P",
     version: "2.0.0",
     category: "critical",
     critical: true,
@@ -370,7 +370,7 @@ const MECO_PLUGINS = [
   },
   {
     id: "telegram",
-    name: "Telegram Gateway & UI",
+    name: "Telegram",
     version: "2.0.0",
     category: "critical",
     critical: true,
@@ -390,7 +390,7 @@ const MECO_PLUGINS = [
   },
   {
     id: "sovereign_engine",
-    name: "Sovereign Engine & LAN Console",
+    name: "Sovereign Engine",
     version: "2.0.0",
     category: "homelab",
     critical: false,
@@ -410,7 +410,7 @@ const MECO_PLUGINS = [
   },
   {
     id: "ai_voice_finance",
-    name: "AI Voice & Sovereign Finance",
+    name: "AI Voice",
     version: "2.0.0",
     category: "ai",
     critical: false,
@@ -430,7 +430,7 @@ const MECO_PLUGINS = [
   },
   {
     id: "butler_media",
-    name: "Butler & Sovereign Media",
+    name: "Butler Media",
     version: "2.0.0",
     category: "media",
     critical: false,
@@ -450,7 +450,7 @@ const MECO_PLUGINS = [
   },
   {
     id: "pwa_console",
-    name: "PWA Sovereign Console & WebPush",
+    name: "PWA Console",
     version: "2.0.0",
     category: "homelab",
     critical: false,
@@ -470,7 +470,7 @@ const MECO_PLUGINS = [
   },
   {
     id: "family_bridge",
-    name: "Family Bridge (Bot Mamá Connector)",
+    name: "Family Bridge",
     version: "2.0.0",
     category: "network",
     critical: false,
@@ -490,7 +490,7 @@ const MECO_PLUGINS = [
   },
   {
     id: "ntfy_gateway",
-    name: "Ntfy Push Gateway",
+    name: "Ntfy",
     version: "2.0.0",
     category: "network",
     critical: false,
@@ -510,7 +510,7 @@ const MECO_PLUGINS = [
   },
   {
     id: "media_arr_ops",
-    name: "Media Arr Ops",
+    name: "Media Arr",
     version: "2.1.1",
     category: "media",
     critical: false,
@@ -530,7 +530,7 @@ const MECO_PLUGINS = [
   },
   {
     id: "mesh_vpn_controller",
-    name: "Mesh VPN Controller",
+    name: "Mesh VPN",
     version: "2.0.0",
     category: "network",
     critical: false,
@@ -550,7 +550,7 @@ const MECO_PLUGINS = [
   },
   {
     id: "smarthome_bridge",
-    name: "SmartHome Bridge",
+    name: "SmartHome",
     version: "2.0.0",
     category: "homelab",
     critical: false,
@@ -570,7 +570,7 @@ const MECO_PLUGINS = [
   },
   {
     id: "phoenix_cloud_sync",
-    name: "Phoenix Cloud Sync (rclone)",
+    name: "Phoenix Sync",
     version: "2.0.0",
     category: "homelab",
     critical: false,

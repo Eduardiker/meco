@@ -36,8 +36,9 @@
 
       <nav class="nav-links">
         <a href="#ramas" class="nav-link">Arquitectura 3 Niveles</a>
+        <a href="#modulos" class="nav-link">Módulos (Nivel 2)</a>
         <a href="#simulador" class="nav-link">Simulador PAM</a>
-        <a href="#plugins" class="nav-link">Plugins Hub (14)</a>
+        <a href="#plugins" class="nav-link">Plugins Hub (Nivel 3)</a>
         <a href="#docs" class="nav-link">meco.docs <span class="docs-badge-nav">GUÍA</span></a>
         <a href="#pilares" class="nav-link">Resiliencia</a>
         <a href="#despliegue" class="nav-link">Despliegue</a>
@@ -90,8 +91,17 @@
           </svg>
           Simulador PAM Interactivo
         </a>
+        <a href="#modulos" class="btn btn-outline">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+            <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+            <line x1="6" y1="6" x2="6.01" y2="6"></line>
+            <line x1="6" y1="18" x2="6.01" y2="18"></line>
+          </svg>
+          Módulos Nativos (Nivel 2)
+        </a>
         <a href="#plugins" class="btn btn-outline">
-          Catálogo Hub (14 Plugins)
+          Plugins Hub (14 Plugins)
         </a>
       </div>
 
@@ -102,16 +112,16 @@
           <span class="stat-label">Arquitectura TFG</span>
         </div>
         <div class="stat-item">
-          <span class="stat-value" style="color: var(--accent-modules)">14 Módulos</span>
-          <span class="stat-label">Plugins Oficiales Hub</span>
+          <span class="stat-value" style="color: var(--accent-modules)">5 Módulos</span>
+          <span class="stat-label">Nativos del Core (Nivel 2)</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-value" style="color: var(--accent-plugins)">14 Plugins</span>
+          <span class="stat-label">Desacoplados en meco-hub</span>
         </div>
         <div class="stat-item">
           <span class="stat-value" style="color: var(--accent-emerald)">&lt; 50 ms</span>
           <span class="stat-label">Escudo Canario Anti-Ransomware</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-value" style="color: #cbd5e1">0% CPU</span>
-          <span class="stat-label">Malla P2P Emergencia en Espera</span>
         </div>
       </div>
     </div>
@@ -195,6 +205,201 @@ python3 meco.py --daemon
     </div>
   </section>
 
+  <!-- NUEVO APARTADO: MÓDULOS NATIVOS DEL SISTEMA (NIVEL 2) -->
+  <section id="modulos" class="modules-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag" style="color: var(--accent-modules); border-color: rgba(45, 212, 191, 0.3);">Nivel 2: Módulos Nativos de meco-core</span>
+        <h2 class="section-title">Módulos del Sistema (Nivel 2)</h2>
+        <p class="section-desc">
+          Componentes estructurales internos de <code>meco-core</code> con nombres e identificadores exactos. A diferencia de los plugins externos, los módulos residen en el repositorio del Core, proporcionan los servicios fundamentales de gobernanza y sirven de puente vital para las extensiones.
+        </p>
+      </div>
+
+      <div class="modules-grid">
+        <!-- 1. PAM -->
+        <article class="module-card">
+          <div class="module-card-header">
+            <div>
+              <span class="module-acronym-badge">PAM</span>
+              <h3 class="module-exact-name">Pregúntale a Meco</h3>
+              <p class="module-role-subtitle">modules/pam/ · Adaptación e Interacción con el Usuario</p>
+            </div>
+            <span class="module-native-pill">Nativo Core</span>
+          </div>
+
+          <p class="module-desc">
+            Motor de humanización e interfaz interactiva del sistema. Centraliza la entrada de comandos y adapta las respuestas dinámicamente mediante <code>ResponseAdapter</code> en 4 perfiles en caliente (Conversacional, Conciso, Técnico y Esquemático), asegurando que el usuario o las interfaces cliente reciban la información en el tono adecuado.
+          </p>
+
+          <div class="module-specs-box">
+            <div class="module-spec-item">
+              <span>Componentes:</span>
+              <strong>ResponseAdapter (engine.py), Router (cli.py)</strong>
+            </div>
+            <div class="module-spec-item">
+              <span>Perfiles:</span>
+              <strong>Conversacional, Conciso, Técnico, Esquemático</strong>
+            </div>
+            <div class="module-spec-item">
+              <span>Permiso Requerido:</span>
+              <strong>pam:interact</strong>
+            </div>
+          </div>
+
+          <div class="module-footer-status">
+            <span style="color: var(--accent-emerald);">● Integrado y Activo</span>
+            <code style="font-size: 0.72rem; color: var(--text-dim);">modules/pam/engine.py</code>
+          </div>
+        </article>
+
+        <!-- 2. CAM -->
+        <article class="module-card">
+          <div class="module-card-header">
+            <div>
+              <span class="module-acronym-badge">CAM</span>
+              <h3 class="module-exact-name">Conecta a Meco</h3>
+              <p class="module-role-subtitle">modules/cam/ · Conectividad a Internet e IPC Inter-Plugins</p>
+            </div>
+            <span class="module-native-pill">Nativo Core</span>
+          </div>
+
+          <p class="module-desc">
+            Gobernador soberano de todas las comunicaciones de red externa y del bus interno entre plugins. Implementa listas blancas de dominios HTTP, disyuntores de red ante corte de fibra óptica y el bus IPC asíncrono inter-plugins con 3 niveles de prioridad estricta (P1 Crítica, P2 Interactiva, P3 Fondo).
+          </p>
+
+          <div class="module-specs-box">
+            <div class="module-spec-item">
+              <span>Componentes:</span>
+              <strong>NetManager (net.py), InterPluginBus (ipc.py)</strong>
+            </div>
+            <div class="module-spec-item">
+              <span>Prioridades IPC:</span>
+              <strong>P1 (Crítica) · P2 (Interactiva) · P3 (Background)</strong>
+            </div>
+            <div class="module-spec-item">
+              <span>Permisos Requeridos:</span>
+              <strong>cam:internet, cam:ipc</strong>
+            </div>
+          </div>
+
+          <div class="module-footer-status">
+            <span style="color: var(--accent-emerald);">● Integrado y Activo</span>
+            <code style="font-size: 0.72rem; color: var(--text-dim);">modules/cam/net.py + ipc.py</code>
+          </div>
+        </article>
+
+        <!-- 3. SAM -->
+        <article class="module-card">
+          <div class="module-card-header">
+            <div>
+              <span class="module-acronym-badge">SAM</span>
+              <h3 class="module-exact-name">Seguridad y Auditoría Meco</h3>
+              <p class="module-role-subtitle">modules/sam/ · Gobernanza y Permisos Criptográficos</p>
+            </div>
+            <span class="module-native-pill">Nativo Core</span>
+          </div>
+
+          <p class="module-desc">
+            Módulo de gobernanza criptográfica y control de accesos. Gestiona la matriz estricta de permisos de plugins, valida firmas SHA-256 de los manifiestos oficiales, audita llamadas a subprocesos del sistema operativo y coordina el aislamiento preventivo y modo búnker ante manipulaciones no autorizadas.
+          </p>
+
+          <div class="module-specs-box">
+            <div class="module-spec-item">
+              <span>Componentes:</span>
+              <strong>PermissionAuthority, AuditLogger, SHA-256 Verifier</strong>
+            </div>
+            <div class="module-spec-item">
+              <span>Filosofía:</span>
+              <strong>Strict Deny por Defecto & Auditoría Criptográfica</strong>
+            </div>
+            <div class="module-spec-item">
+              <span>Ámbitos Clave:</span>
+              <strong>core:admin, system:exec</strong>
+            </div>
+          </div>
+
+          <div class="module-footer-status">
+            <span style="color: var(--accent-cyan);">● Módulo Estructural N2</span>
+            <code style="font-size: 0.72rem; color: var(--text-dim);">modules/sam/governance.py</code>
+          </div>
+        </article>
+
+        <!-- 4. MAM -->
+        <article class="module-card">
+          <div class="module-card-header">
+            <div>
+              <span class="module-acronym-badge">MAM</span>
+              <h3 class="module-exact-name">Memoria y Almacenamiento Meco</h3>
+              <p class="module-role-subtitle">modules/mam/ · Persistencia y Gobernanza de Recursos</p>
+            </div>
+            <span class="module-native-pill">Nativo Core</span>
+          </div>
+
+          <p class="module-desc">
+            Gobernador de ciclo de vida del almacenamiento persistente, estados de plugins y consumo de memoria RAM. Ejecuta recolección forzada con <code>glibc malloc_trim(0)</code> para mitigar la fragmentación de memoria en Linux de bajo consumo y salvaguarda las bases de datos SQLite locales y el histórico.
+          </p>
+
+          <div class="module-specs-box">
+            <div class="module-spec-item">
+              <span>Componentes:</span>
+              <strong>StorageGovernor, MemoryTrimmer (malloc_trim), StateVault</strong>
+            </div>
+            <div class="module-spec-item">
+              <span>Consumo RSS:</span>
+              <strong>Mantiene MECO en 45 MB – 65 MB estables</strong>
+            </div>
+            <div class="module-spec-item">
+              <span>Permiso Requerido:</span>
+              <strong>core:storage</strong>
+            </div>
+          </div>
+
+          <div class="module-footer-status">
+            <span style="color: var(--accent-cyan);">● Módulo Estructural N2</span>
+            <code style="font-size: 0.72rem; color: var(--text-dim);">modules/mam/storage.py</code>
+          </div>
+        </article>
+
+        <!-- 5. VAM -->
+        <article class="module-card">
+          <div class="module-card-header">
+            <div>
+              <span class="module-acronym-badge">VAM</span>
+              <h3 class="module-exact-name">Vigía Autónomo Meco</h3>
+              <p class="module-role-subtitle">modules/vam/ · Watchdog y Supervivencia del Sistema</p>
+            </div>
+            <span class="module-native-pill">Nativo Core</span>
+          </div>
+
+          <p class="module-desc">
+            Centinela de disponibilidad y watchdog de bajo nivel del Microkernel. Monitorea los bucles de eventos, supervisa el estado de salud de cada plugin desacoplado, gestiona el estado de los Circuit Breakers (Closed/Open/Half-Open) y orquesta la activación del modo supervivencia fuera de banda si falla la conectividad.
+          </p>
+
+          <div class="module-specs-box">
+            <div class="module-spec-item">
+              <span>Componentes:</span>
+              <strong>WatchdogDaemon, CircuitBreakerRegistry, FailoverEngine</strong>
+            </div>
+            <div class="module-spec-item">
+              <span>Tolerancia a Fallos:</span>
+              <strong>Aislamiento de caídas individuales (0 downtime global)</strong>
+            </div>
+            <div class="module-spec-item">
+              <span>Supervivencia:</span>
+              <strong>Activación automática de contingencias</strong>
+            </div>
+          </div>
+
+          <div class="module-footer-status">
+            <span style="color: var(--accent-cyan);">● Módulo Estructural N2</span>
+            <code style="font-size: 0.72rem; color: var(--text-dim);">modules/vam/watchdog.py</code>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
   <!-- Section 2: SIMULADOR INTERACTIVO DE TERMINAL Y PERFILES PAM -->
   <section id="simulador" class="simulator-section">
     <div class="container">
@@ -251,7 +456,7 @@ python3 meco.py --daemon
     <div class="container">
       <div class="section-header">
         <span class="section-tag">Nivel 3: Meco-Hub</span>
-        <h2 class="section-title">Catálogo Oficial de Plugins (14 Módulos)</h2>
+        <h2 class="section-title">Catálogo Oficial de Plugins (14 Extensiones Desacopladas de meco-hub)</h2>
         <p class="section-desc">
           Extensiones 100% desacopladas del Core bajo el estándar oficial de 2 bloques (<code>calls.py</code> ➔ <code>actions.py</code>). Cada plugin opera con un MecoContext aislado sujeto a la Autoridad de Permisos.
         </p>
