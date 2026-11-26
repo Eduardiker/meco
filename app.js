@@ -672,34 +672,34 @@ function renderBranchTree(filterTier = "all") {
     </defs>
   `;
 
-  // Layout Coordinates: Horizontal tree layout (ViewBox 0 0 780 755)
+  // Layout Coordinates: Horizontal tree layout (ViewBox 0 0 830 760)
   const coords = {
     root: { x: 20, y: 345, w: 175, h: 65, icon: "◆" },
     
     // Tier nodes
-    tier1: { x: 245, y: 95,  w: 190, h: 60, icon: "🛡️" },
-    tier2: { x: 245, y: 345, w: 190, h: 60, icon: "🏛️" },
-    tier3: { x: 245, y: 595, w: 190, h: 60, icon: "🧩" },
+    tier1: { x: 240, y: 95,  w: 190, h: 60, icon: "🛡️" },
+    tier2: { x: 240, y: 345, w: 190, h: 60, icon: "🏛️" },
+    tier3: { x: 240, y: 595, w: 190, h: 60, icon: "🧩" },
     
     // Tier 1 children (Core)
-    core_perms:     { x: 495, y: 25,  w: 215, h: 42, icon: "🔑" },
-    core_schematic: { x: 495, y: 75,  w: 215, h: 42, icon: "📟" },
-    core_loader:    { x: 495, y: 125, w: 215, h: 42, icon: "⚡" },
-    core_state:     { x: 495, y: 175, w: 215, h: 42, icon: "💾" },
+    core_perms:     { x: 480, y: 25,  w: 250, h: 42, icon: "🔑" },
+    core_schematic: { x: 480, y: 75,  w: 250, h: 42, icon: "📟" },
+    core_loader:    { x: 480, y: 125, w: 250, h: 42, icon: "⚡" },
+    core_state:     { x: 480, y: 175, w: 250, h: 42, icon: "💾" },
     
     // Tier 2 children (All 5 Native Modules)
-    pam_module:     { x: 495, y: 245, w: 215, h: 42, icon: "💬" },
-    cam_module:     { x: 495, y: 295, w: 215, h: 42, icon: "🌐" },
-    sam_module:     { x: 495, y: 345, w: 215, h: 42, icon: "🛡️" },
-    mam_module:     { x: 495, y: 395, w: 215, h: 42, icon: "🧠" },
-    vam_module:     { x: 495, y: 445, w: 215, h: 42, icon: "👁️" },
+    pam_module:     { x: 480, y: 245, w: 250, h: 42, icon: "💬" },
+    cam_module:     { x: 480, y: 295, w: 250, h: 42, icon: "🌐" },
+    sam_module:     { x: 480, y: 345, w: 250, h: 42, icon: "🛡️" },
+    mam_module:     { x: 480, y: 395, w: 250, h: 42, icon: "🧠" },
+    vam_module:     { x: 480, y: 445, w: 250, h: 42, icon: "👁️" },
     
     // Tier 3 children (Plugins Hub)
-    hub_security:   { x: 495, y: 505, w: 215, h: 42, icon: "🚨" },
-    hub_homelab:    { x: 495, y: 555, w: 215, h: 42, icon: "🖥️" },
-    hub_emergency:  { x: 495, y: 605, w: 215, h: 42, icon: "📡" },
-    hub_telegram:   { x: 495, y: 655, w: 215, h: 42, icon: "🤖" },
-    hub_ecosystem:  { x: 495, y: 705, w: 215, h: 42, icon: "📦" }
+    hub_security:   { x: 480, y: 505, w: 250, h: 42, icon: "🚨" },
+    hub_homelab:    { x: 480, y: 555, w: 250, h: 42, icon: "🖥️" },
+    hub_emergency:  { x: 480, y: 605, w: 250, h: 42, icon: "📡" },
+    hub_telegram:   { x: 480, y: 655, w: 250, h: 42, icon: "🤖" },
+    hub_ecosystem:  { x: 480, y: 705, w: 250, h: 42, icon: "📦" }
   };
 
   // Branch Links to Draw
@@ -1373,7 +1373,7 @@ function renderGitBranches(filterRepo = "all") {
     const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
     line.setAttribute("x1", "40");
     line.setAttribute("y1", branch.laneY);
-    line.setAttribute("x2", "850");
+    line.setAttribute("x2", "880");
     line.setAttribute("y2", branch.laneY);
     line.setAttribute("stroke", "rgba(255, 255, 255, 0.08)");
     line.setAttribute("stroke-dasharray", "4 6");
