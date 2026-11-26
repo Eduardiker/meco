@@ -36,6 +36,7 @@
 
       <nav class="nav-links">
         <a href="#ramas" class="nav-link">Arquitectura 3 Niveles</a>
+        <a href="#git-ramas" class="nav-link">Ramas GitHub</a>
         <a href="#modulos" class="nav-link">Módulos (Nivel 2)</a>
         <a href="#simulador" class="nav-link">Simulador PAM</a>
         <a href="#plugins" class="nav-link">Plugins Hub (Nivel 3)</a>
@@ -168,7 +169,7 @@
         <div class="tree-workbench">
           <!-- Interactive SVG Tree -->
           <div class="tree-canvas-container">
-            <svg id="branchSvg" viewBox="0 0 760 640" preserveAspectRatio="xMinYMin meet"></svg>
+            <svg id="branchSvg" viewBox="0 0 780 755" preserveAspectRatio="xMinYMin meet"></svg>
           </div>
 
           <!-- Inspector Side Panel -->
@@ -199,6 +200,66 @@ python3 meco.py --daemon
                 Probar en Simulador &rarr;
               </a>
             </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: TOPOLOGÍA Y RAMAS DE GITHUB (ECOSISTEMA MULTI-REPOSITORIO & GIT FLOW) -->
+  <section id="git-ramas" class="git-branches-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag" style="color: #38bdf8; border-color: rgba(56, 189, 248, 0.3);">Topología Multi-Repositorio</span>
+        <h2 class="section-title">Ecosistema y Ramas en GitHub</h2>
+        <p class="section-desc">
+          Explora la red de ramas Git activas, lanzamientos y flujo de integración continua (Git Flow) a través de los tres repositorios oficiales del proyecto. Haz clic en cualquier commit o rama para inspeccionar sus metadatos y reglas de gobernanza.
+        </p>
+      </div>
+
+      <div class="git-flow-card">
+        <!-- Git Toolbar -->
+        <div class="git-toolbar">
+          <div class="git-repo-tabs">
+            <button class="git-tab-btn active" data-gitfilter="all">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="18" cy="18" r="3"></circle>
+                <circle cx="6" cy="6" r="3"></circle>
+                <path d="M13 6h3a2 2 0 0 1 2 2v7"></path>
+                <line x1="6" y1="9" x2="6" y2="21"></line>
+              </svg>
+              Todos los Repositorios
+            </button>
+            <button class="git-tab-btn" data-gitfilter="core">
+              <span style="color: #38bdf8;">📦</span> meco-core
+            </button>
+            <button class="git-tab-btn" data-gitfilter="hub">
+              <span style="color: #a78bfa;">🧩</span> meco-hub
+            </button>
+            <button class="git-tab-btn" data-gitfilter="web">
+              <span style="color: #2dd4bf;">🌐</span> meco (Pages)
+            </button>
+          </div>
+
+          <div class="git-legend">
+            <span class="git-legend-item"><span class="git-dot main"></span> main (Producción)</span>
+            <span class="git-legend-item"><span class="git-dot release"></span> release/v3.0</span>
+            <span class="git-legend-item"><span class="git-dot develop"></span> develop</span>
+            <span class="git-legend-item"><span class="git-dot feature"></span> feature/*</span>
+            <span class="git-legend-item"><span class="git-dot hotfix"></span> hotfix/*</span>
+          </div>
+        </div>
+
+        <!-- Git Workbench: SVG Network + Inspector -->
+        <div class="git-workbench">
+          <!-- Interactive SVG Git Network -->
+          <div class="git-canvas-container">
+            <svg id="gitBranchesSvg" viewBox="0 0 880 500" preserveAspectRatio="xMinYMin meet"></svg>
+          </div>
+
+          <!-- Inspector Side Panel -->
+          <aside class="git-inspector" id="gitInspector">
+            <!-- Dynamically populated via app.js -->
           </aside>
         </div>
       </div>

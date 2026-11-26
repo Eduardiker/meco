@@ -125,92 +125,109 @@ ctypes.CDLL('libc.so.6').malloc_trim(0)
   tier2: {
     id: "tier2",
     tier: 2,
-    title: "NIVEL 2: PAM & CAM",
-    subtitle: "modules/ (Interacción & Red)",
+    title: "NIVEL 2: Módulos Nativos",
+    subtitle: "modules/ (PAM, CAM, SAM, MAM, VAM)",
     path: "modules/",
-    badge: "Nivel 2: Módulos Nativos",
-    desc: "Capa intermedia del sistema. PAM (Pregúntale a Meco) adapta las respuestas a las necesidades del usuario en lenguaje humano. CAM (Conecta a Meco) gobierna las conexiones al exterior y la mensajería inter-plugins.",
+    badge: "Nivel 2: Servicios Estructurales",
+    desc: "Módulos internos empaquetados en meco-core. Proveen humanización de interfaz (PAM), gobernanza de red e IPC (CAM), control de permisos (SAM), mitigación de fragmentación RAM (MAM) y watchdog de supervivencia (VAM).",
     specs: {
-      "Módulo PAM": "Pregúntale a Meco (modules/pam/)",
-      "Módulo CAM": "Conecta a Meco (modules/cam/)",
-      "Perfiles de Respuesta": "conversational, concise, technical, schematic",
-      "Gobernanza Red": "Circuit breakers por dominio y Modo Offline estricto"
+      "Módulos Oficiales": "5 módulos del sistema (PAM, CAM, SAM, MAM, VAM)",
+      "Ubicación": "modules/ en el repositorio meco-core",
+      "Ciclo de Vida": "initialize() ➔ handle_command() ➔ status() ➔ shutdown()",
+      "Acoplamiento": "Nativo (requerido por el ecosistema de plugins)"
     },
-    code: `# El Nivel 2 media entre la frialdad del Core y la riqueza de los Plugins
+    code: `# Inyección de servicios estructurales en el arranque de MECO
 from modules.pam import ResponseAdapter, UserInteractionEngine
-from modules.cam import InternetConnectionManager, InterPluginBus`,
-    children: ["pam_adapter", "pam_interaction", "cam_network", "cam_ipc"]
+from modules.cam import InternetConnectionManager, InterPluginBus
+from modules.sam import SecurityAuditGovernor
+from modules.mam import MemoryStorageGovernor
+from modules.vam import AutonomousWatchdogDaemon`,
+    children: ["pam_module", "cam_module", "sam_module", "mam_module", "vam_module"]
   },
-  pam_adapter: {
-    id: "pam_adapter",
+  pam_module: {
+    id: "pam_module",
     tier: 2,
     parent: "tier2",
-    title: "PAM: Motor de Respuestas",
-    subtitle: "modules/pam/adapter.py",
-    path: "modules/pam/adapter.py",
-    badge: "Nivel 2: Adaptación",
-    desc: "Adapta el tono y estructura de cualquier dato emitido por el sistema según el perfil activo: 'conversational' (amigable), 'concise' (directo al grano), 'technical' (con trazabilidad) o 'schematic' (delegación en Core Nivel 1).",
+    title: "PAM: Pregúntale a Meco",
+    subtitle: "modules/pam/ · Interfaz y 4 Perfiles",
+    path: "modules/pam/engine.py",
+    badge: "Nivel 2: Adaptación Humana",
+    desc: "Motor de adaptación lingüística. Traduce la telemetría en 4 perfiles dinámicos: Conversacional, Conciso, Técnico o Esquemático. Centraliza la recepción de comandos del usuario.",
     specs: {
-      "Perfiles Válidos": "conversational | concise | technical | schematic",
-      "Fallback": "Delegación limpia en Core Schematic si está activo",
-      "Normalización": "Conversión automática de tuplas, diccionarios y listas"
+      "Perfiles": "conversational | concise | technical | schematic",
+      "Componentes": "ResponseAdapter (engine.py), Router (cli.py)",
+      "Permiso Requerido": "pam:interact"
     },
     code: `adapter = ResponseAdapter(default_style="conversational")
-# Misma información, adaptada al perfil seleccionado por el usuario:
-texto = adapter.adapt({"docker": "7 up", "n100_temp": "39C"})`
+respuesta = adapter.adapt({"docker": "18 activos", "n100_temp": "38.5C"})`
   },
-  pam_interaction: {
-    id: "pam_interaction",
+  cam_module: {
+    id: "cam_module",
     tier: 2,
     parent: "tier2",
-    title: "PAM: Interacción Usuario",
-    subtitle: "modules/pam/interaction.py",
-    path: "modules/pam/interaction.py",
-    badge: "Nivel 2: Interfaz Humana",
-    desc: "Motor de procesamiento de comandos y lenguaje natural. Valida la identidad del interlocutor, enruta intenciones hacia los plugins autorizados y devuelve la salida filtrada por ResponseAdapter.",
+    title: "CAM: Conecta a Meco",
+    subtitle: "modules/cam/ · Red & Bus IPC",
+    path: "modules/cam/net.py + ipc.py",
+    badge: "Nivel 2: Conectividad & Eventos",
+    desc: "Gobernador soberano de tráfico exterior (whitelist DNS, corte offline ante caída de fibra) y Bus IPC asíncrono inter-plugins con prioridades P1 (crítica), P2 (interactiva) y P3 (fondo).",
     specs: {
-      "Enrutamiento": "Despacho directo de comandos (/estado, /seguridad, /musica)",
-      "Lenguaje Natural": "Detección de intenciones y reenvío a IA/plugins",
-      "Permisos": "Exige pam:interact para responder"
-    },
-    code: `engine = UserInteractionEngine(kernel=microkernel)
-respuesta = engine.process_input("/estado", user_id="admin_123")`
-  },
-  cam_network: {
-    id: "cam_network",
-    tier: 2,
-    parent: "tier2",
-    title: "CAM: Gestor de Internet",
-    subtitle: "modules/cam/network.py",
-    path: "modules/cam/network.py",
-    badge: "Nivel 2: Conectividad",
-    desc: "Controlador estricto de salida a Internet. Aplica listas blancas de dominios, disyuntores de conexión por host para no saturar hilos y modo 'offline_mode' que bloquea cualquier fuga de datos al exterior.",
-    specs: {
-      "Modo Offline": "Bloqueo total inmediato de peticiones externas",
-      "Circuit Breakers": "Aislamiento por host ante caídas de proveedores",
-      "Permiso Obligatorio": "cam:internet evaluado en cada request"
-    },
-    code: `net = InternetConnectionManager(offline_mode=False)
-# Si se activa el modo búnker o se cae la fibra, corta inmediatamente
-net.set_offline_mode(True)`
-  },
-  cam_ipc: {
-    id: "cam_ipc",
-    tier: 2,
-    parent: "tier2",
-    title: "CAM: Bus IPC Inter-Plugins",
-    subtitle: "modules/cam/ipc.py",
-    path: "modules/cam/ipc.py",
-    badge: "Nivel 2: Comunicación IPC",
-    desc: "Bus de eventos y llamadas cruzadas con 3 niveles de prioridad (P1 Crítica, P2 Interactiva, P3 Background). Permite a los plugins colaborar sin acoplar su código fuente entre sí.",
-    specs: {
-      "Prioridades": "1 (Alertas/Seguridad) a 3 (Telemetría de fondo)",
-      "Aislamiento": "Validación de permisos 'cam:ipc' emisor y receptor",
-      "Deadlock-Free": "Despacho asíncrono y timeouts estrictos"
+      "Protección Red": "Whitelist DNS & Circuit Breakers por Host",
+      "Bus IPC": "Prioridades P1 (Crítica) · P2 (Interactiva) · P3 (Background)",
+      "Permisos Requeridos": "cam:internet, cam:ipc"
     },
     code: `bus = InterPluginBus()
-# Publicar evento crítico de seguridad que escuchará Telegram y Ntfy
-bus.publish("security:canary_tripped", {"path": "/shared/docs"}, priority=1)`
+bus.publish("security:canary_tripped", {"path": "/shared/canary.pdf"}, priority=1)`
+  },
+  sam_module: {
+    id: "sam_module",
+    tier: 2,
+    parent: "tier2",
+    title: "SAM: Seguridad y Auditoría",
+    subtitle: "modules/sam/ · Permisos Criptográficos",
+    path: "modules/sam/governance.py",
+    badge: "Nivel 2: Gobernanza Criptográfica",
+    desc: "Autoridad de control de acceso y verificación de integridad. Evalúa la matriz de permisos Strict Deny, comprueba hashes SHA-256 de los plugins y audita llamadas a subprocesos Linux.",
+    specs: {
+      "Política": "Strict Deny por Defecto",
+      "Auditoría": "Registro de eventos en memoria y log firmado",
+      "Capacidades": "core:admin, system:exec"
+    },
+    code: `sam = SecurityAuditGovernor()
+sam.verify_manifest_integrity("plugins/sentinel/manifest.json")`
+  },
+  mam_module: {
+    id: "mam_module",
+    tier: 2,
+    parent: "tier2",
+    title: "MAM: Memoria y Persistencia",
+    subtitle: "modules/mam/ · malloc_trim & Almacenamiento",
+    path: "modules/mam/storage.py",
+    badge: "Nivel 2: Gobernanza RAM/Disco",
+    desc: "Gobernador de memoria y almacenamiento persistente. Ejecuta llamadas periódicas a glibc malloc_trim(0) para mantener el consumo en 45-65 MB en CPUs de bajo consumo y supervisa SQLite.",
+    specs: {
+      "Consumo RSS": "45 MB – 65 MB Estabilizado",
+      "Autovacuna": "glibc malloc_trim(0) periódico",
+      "Persistencia": "SQLite .recover, Restic backups y StateVault"
+    },
+    code: `mam = MemoryStorageGovernor()
+mam.trim_glibc_memory()  # ctypes.CDLL("libc.so.6").malloc_trim(0)`
+  },
+  vam_module: {
+    id: "vam_module",
+    tier: 2,
+    parent: "tier2",
+    title: "VAM: Vigía Autónomo",
+    subtitle: "modules/vam/ · Watchdog & Supervivencia",
+    path: "modules/vam/watchdog.py",
+    badge: "Nivel 2: Supervivencia & Watchdog",
+    desc: "Centinela de disponibilidad y watchdog de bajo nivel. Monitorea los bucles de eventos, supervisa el estado de salud de cada plugin y conmuta a modo supervivencia táctica ante fallos.",
+    specs: {
+      "Disyuntores": "Circuit Breakers (Closed / Open / Half-Open)",
+      "Tolerancia": "0 caídas globales por fallos de plugins aislados",
+      "Supervivencia": "Activación automática de canal fuera de banda"
+    },
+    code: `vam = AutonomousWatchdogDaemon()
+vam.monitor_plugin_heartbeats()`
   },
   tier3: {
     id: "tier3",
@@ -232,7 +249,7 @@ plugins/<nombre_plugin>/
 ├── actions.py        # Motor de lógica y APIs (BasePluginActions)
 ├── manifest.json     # Declaración de capacidades y SHA-256
 └── README.md         # Documentación de uso`,
-    children: ["hub_security", "hub_homelab", "hub_emergency", "hub_telegram"]
+    children: ["hub_security", "hub_homelab", "hub_emergency", "hub_telegram", "hub_ecosystem"]
   },
   hub_security: {
     id: "hub_security",
@@ -301,6 +318,23 @@ sentinel.actions.trigger_bunker_mode(reason="canary_compromised")`
     },
     code: `# Registro de comandos del bot
 calls.register_commands() -> {"/estado", "/seguridad", "/compras", "/temperatura"}`
+  },
+  hub_ecosystem: {
+    id: "hub_ecosystem",
+    tier: 3,
+    parent: "tier3",
+    title: "Ecosistema Hub (+10 Plugins)",
+    subtitle: "meco-hub (Media, IA, VPN, PWA...)",
+    path: "plugins/",
+    badge: "Nivel 3: Extensiones Oficiales",
+    desc: "Catálogo completo de 14 extensiones certificadas: AI Voice (faster-whisper), Sovereign Engine (consola LAN :8899), Butler Media, PWA Console, Family Bridge, Ntfy, Media Arr, Mesh VPN, SmartHome y Phoenix Sync.",
+    specs: {
+      "Arquitectura": "Estándar 2 Bloques (calls.py ➔ actions.py)",
+      "Certificación": "Firmas SHA-256 en registry.json",
+      "Catálogo": "14 plugins 100% desacoplados"
+    },
+    code: `# Consultar catálogo completo oficial en meco-hub
+python3 meco.py --cmd "/plugins"`
   }
 };
 
@@ -599,68 +633,73 @@ function renderBranchTree(filterTier = "all") {
   const svg = document.getElementById("branchSvg");
   if (!svg) return;
 
-  // Clear SVG
+  // Clear SVG with rich defs and glow filters
   svg.innerHTML = `
     <defs>
+      <!-- Glow filter for selected branches and nodes -->
+      <filter id="branchGlow" x="-30%" y="-30%" width="160%" height="160%">
+        <feGaussianBlur stdDeviation="3.5" result="blur" />
+        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+      </filter>
+
       <!-- Gradients for branch lines -->
       <linearGradient id="gradTier1" x1="0%" y1="0%" x2="100%" y2="0%">
         <stop offset="0%" stop-color="#cbd5e1" stop-opacity="0.8"/>
-        <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.9"/>
+        <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.95"/>
       </linearGradient>
       <linearGradient id="gradTier2" x1="0%" y1="0%" x2="100%" y2="0%">
         <stop offset="0%" stop-color="#cbd5e1" stop-opacity="0.8"/>
-        <stop offset="100%" stop-color="#2dd4bf" stop-opacity="0.9"/>
+        <stop offset="100%" stop-color="#2dd4bf" stop-opacity="0.95"/>
       </linearGradient>
       <linearGradient id="gradTier3" x1="0%" y1="0%" x2="100%" y2="0%">
         <stop offset="0%" stop-color="#cbd5e1" stop-opacity="0.8"/>
-        <stop offset="100%" stop-color="#a78bfa" stop-opacity="0.9"/>
+        <stop offset="100%" stop-color="#a78bfa" stop-opacity="0.95"/>
       </linearGradient>
       
       <!-- Sub-branch gradients -->
       <linearGradient id="gradSub1" x1="0%" y1="0%" x2="100%" y2="0%">
         <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.6"/>
-        <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.9"/>
+        <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.95"/>
       </linearGradient>
       <linearGradient id="gradSub2" x1="0%" y1="0%" x2="100%" y2="0%">
         <stop offset="0%" stop-color="#2dd4bf" stop-opacity="0.6"/>
-        <stop offset="100%" stop-color="#2dd4bf" stop-opacity="0.9"/>
+        <stop offset="100%" stop-color="#2dd4bf" stop-opacity="0.95"/>
       </linearGradient>
       <linearGradient id="gradSub3" x1="0%" y1="0%" x2="100%" y2="0%">
         <stop offset="0%" stop-color="#a78bfa" stop-opacity="0.6"/>
-        <stop offset="100%" stop-color="#a78bfa" stop-opacity="0.9"/>
+        <stop offset="100%" stop-color="#a78bfa" stop-opacity="0.95"/>
       </linearGradient>
     </defs>
   `;
 
-  // Layout Coordinates: Horizontal tree layout
-  // Column 1: Root (X: 30, Y: 260)
-  // Column 2: Tiers (X: 250) -> Tier 1 (Y: 90), Tier 2 (Y: 260), Tier 3 (Y: 430)
-  // Column 3: Subnodes (X: 520)
+  // Layout Coordinates: Horizontal tree layout (ViewBox 0 0 780 755)
   const coords = {
-    root: { x: 20, y: 220, w: 170, h: 65 },
+    root: { x: 20, y: 345, w: 175, h: 65, icon: "◆" },
     
     // Tier nodes
-    tier1: { x: 250, y: 80, w: 180, h: 60 },
-    tier2: { x: 250, y: 225, w: 180, h: 60 },
-    tier3: { x: 250, y: 370, w: 180, h: 60 },
+    tier1: { x: 245, y: 95,  w: 190, h: 60, icon: "🛡️" },
+    tier2: { x: 245, y: 345, w: 190, h: 60, icon: "🏛️" },
+    tier3: { x: 245, y: 595, w: 190, h: 60, icon: "🧩" },
     
-    // Tier 1 children
-    core_perms:     { x: 500, y: 30,  w: 190, h: 42 },
-    core_schematic: { x: 500, y: 80,  w: 190, h: 42 },
-    core_loader:    { x: 500, y: 130, w: 190, h: 42 },
-    core_state:     { x: 500, y: 180, w: 190, h: 42 },
+    // Tier 1 children (Core)
+    core_perms:     { x: 495, y: 25,  w: 215, h: 42, icon: "🔑" },
+    core_schematic: { x: 495, y: 75,  w: 215, h: 42, icon: "📟" },
+    core_loader:    { x: 495, y: 125, w: 215, h: 42, icon: "⚡" },
+    core_state:     { x: 495, y: 175, w: 215, h: 42, icon: "💾" },
     
-    // Tier 2 children
-    pam_adapter:     { x: 500, y: 235, w: 190, h: 42 },
-    pam_interaction: { x: 500, y: 285, w: 190, h: 42 },
-    cam_network:     { x: 500, y: 335, w: 190, h: 42 },
-    cam_ipc:         { x: 500, y: 385, w: 190, h: 42 },
+    // Tier 2 children (All 5 Native Modules)
+    pam_module:     { x: 495, y: 245, w: 215, h: 42, icon: "💬" },
+    cam_module:     { x: 495, y: 295, w: 215, h: 42, icon: "🌐" },
+    sam_module:     { x: 495, y: 345, w: 215, h: 42, icon: "🛡️" },
+    mam_module:     { x: 495, y: 395, w: 215, h: 42, icon: "🧠" },
+    vam_module:     { x: 495, y: 445, w: 215, h: 42, icon: "👁️" },
     
-    // Tier 3 children
-    hub_security:    { x: 500, y: 440, w: 190, h: 42 },
-    hub_homelab:     { x: 500, y: 490, w: 190, h: 42 },
-    hub_emergency:   { x: 500, y: 540, w: 190, h: 42 },
-    hub_telegram:    { x: 500, y: 590, w: 190, h: 42 }
+    // Tier 3 children (Plugins Hub)
+    hub_security:   { x: 495, y: 505, w: 215, h: 42, icon: "🚨" },
+    hub_homelab:    { x: 495, y: 555, w: 215, h: 42, icon: "🖥️" },
+    hub_emergency:  { x: 495, y: 605, w: 215, h: 42, icon: "📡" },
+    hub_telegram:   { x: 495, y: 655, w: 215, h: 42, icon: "🤖" },
+    hub_ecosystem:  { x: 495, y: 705, w: 215, h: 42, icon: "📦" }
   };
 
   // Branch Links to Draw
@@ -676,17 +715,19 @@ function renderBranchTree(filterTier = "all") {
     { from: "tier1", to: "core_loader", grad: "url(#gradSub1)", tier: 1 },
     { from: "tier1", to: "core_state", grad: "url(#gradSub1)", tier: 1 },
     
-    // Tier 2 to children
-    { from: "tier2", to: "pam_adapter", grad: "url(#gradSub2)", tier: 2 },
-    { from: "tier2", to: "pam_interaction", grad: "url(#gradSub2)", tier: 2 },
-    { from: "tier2", to: "cam_network", grad: "url(#gradSub2)", tier: 2 },
-    { from: "tier2", to: "cam_ipc", grad: "url(#gradSub2)", tier: 2 },
+    // Tier 2 to children (All 5 modules)
+    { from: "tier2", to: "pam_module", grad: "url(#gradSub2)", tier: 2 },
+    { from: "tier2", to: "cam_module", grad: "url(#gradSub2)", tier: 2 },
+    { from: "tier2", to: "sam_module", grad: "url(#gradSub2)", tier: 2 },
+    { from: "tier2", to: "mam_module", grad: "url(#gradSub2)", tier: 2 },
+    { from: "tier2", to: "vam_module", grad: "url(#gradSub2)", tier: 2 },
     
     // Tier 3 to children
     { from: "tier3", to: "hub_security", grad: "url(#gradSub3)", tier: 3 },
     { from: "tier3", to: "hub_homelab", grad: "url(#gradSub3)", tier: 3 },
     { from: "tier3", to: "hub_emergency", grad: "url(#gradSub3)", tier: 3 },
-    { from: "tier3", to: "hub_telegram", grad: "url(#gradSub3)", tier: 3 }
+    { from: "tier3", to: "hub_telegram", grad: "url(#gradSub3)", tier: 3 },
+    { from: "tier3", to: "hub_ecosystem", grad: "url(#gradSub3)", tier: 3 }
   ];
 
   // Draw Links
@@ -710,8 +751,11 @@ function renderBranchTree(filterTier = "all") {
 
     const pathElem = document.createElementNS("http://www.w3.org/2000/svg", "path");
     pathElem.setAttribute("d", pathData);
-    pathElem.setAttribute("class", `svg-branch-link ${isRelated ? "active-link" : ""}`);
+    pathElem.setAttribute("class", `svg-branch-link ${isRelated ? "active-link pulse-flow" : ""}`);
     pathElem.setAttribute("stroke", link.grad);
+    if (isRelated) {
+      pathElem.setAttribute("filter", "url(#branchGlow)");
+    }
     svg.appendChild(pathElem);
   });
 
@@ -751,8 +795,11 @@ function renderBranchTree(filterTier = "all") {
     rect.setAttribute("height", pos.h);
     rect.setAttribute("class", "svg-node-rect");
     rect.setAttribute("fill", fillColor);
-    rect.setAttribute("stroke", strokeColor);
+    rect.setAttribute("stroke", isSelected ? (nodeData.tier === 2 ? "#2dd4bf" : strokeColor) : strokeColor);
     rect.setAttribute("stroke-width", isSelected ? "2.5" : "1.5");
+    if (isSelected) {
+      rect.setAttribute("filter", "url(#branchGlow)");
+    }
     group.appendChild(rect);
 
     // Indicator Dot
@@ -1135,12 +1182,392 @@ function renderMatrixTable() {
 }
 
 // ==============================================================================
+
+// ==============================================================================
+// 1.5 DATA & VISUALIZER: TOPOLOGÍA Y RAMAS DE GITHUB (GIT FLOW)
+// ==============================================================================
+const GITHUB_TOPOLOGY_DATA = {
+  branches: {
+    "core:main": {
+      key: "core:main",
+      repo: "Eduardiker/meco-core",
+      repoId: "core",
+      repoUrl: "https://github.com/Eduardiker/meco-core",
+      name: "main",
+      type: "main",
+      laneY: 65,
+      color: "#10b981",
+      badge: "Producción · Core Inmutable",
+      desc: "Rama principal de producción inmutable de meco-core. Solo recibe código estabilizado y auditado tras pasar auditoría SHA-256. Mantiene la autoridad de permisos y el Modo Esquemático Básico.",
+      protection: [
+        "Firma criptográfica GPG requerida en cada commit",
+        "Revisión de Pull Request obligatoria antes de merge",
+        "Checks de integración continua (CI) en verde"
+      ],
+      cmd: "git clone -b main https://github.com/Eduardiker/meco-core.git",
+      commits: [
+        { id: "cm1", hash: "a03f5af", tag: "v2.0.0", x: 100, msg: "Release oficial M.E.C.O. v2.0 Modular Architecture", date: "2026-09-15" },
+        { id: "cm2", hash: "f73571c", tag: "v3.0.0", x: 570, msg: "docs: corregir nombre oficial a Microkernel Extensible Controlador y Orquestador", date: "2026-11-20" }
+      ]
+    },
+    "core:release": {
+      key: "core:release",
+      repo: "Eduardiker/meco-core",
+      repoUrl: "https://github.com/Eduardiker/meco-core/tree/release/v3.0",
+      name: "release/v3.0",
+      type: "release",
+      laneY: 130,
+      color: "#38bdf8",
+      badge: "Release · Estabilización v3.0",
+      desc: "Rama de consolidación arquitectónica de 3 niveles. Congela las interfaces de PAM y CAM, valida la recolección de fragmentación glibc malloc_trim y prepara el lanzamiento de v3.0.",
+      protection: [
+        "Prohibido push directo; solo merges desde develop",
+        "Verificación de consumo RSS (<65 MB en reposo)"
+      ],
+      cmd: "git clone -b release/v3.0 https://github.com/Eduardiker/meco-core.git",
+      commits: [
+        { id: "cr1", hash: "5553774", tag: "v3.0-rc2", x: 440, msg: "refactor(core): consolidar arquitectura de 3 niveles como proyecto M.E.C.O. v3.0", date: "2026-11-10" }
+      ]
+    },
+    "core:develop": {
+      key: "core:develop",
+      repo: "Eduardiker/meco-core",
+      repoUrl: "https://github.com/Eduardiker/meco-core/tree/develop",
+      name: "develop",
+      type: "develop",
+      laneY: 195,
+      color: "#f59e0b",
+      badge: "Desarrollo · Integración Continua",
+      desc: "Línea base de integración para el trabajo en meco-core. Aquí convergen las ramas feature/* de los módulos nativos antes de la fase de estabilización.",
+      protection: [
+        "Validación automática con pytest",
+        "Compatibilidad garantizada con Python 3.10+"
+      ],
+      cmd: "git clone -b develop https://github.com/Eduardiker/meco-core.git",
+      commits: [
+        { id: "cd1", hash: "fff5bdf", tag: null, x: 200, msg: "feat(tfg): reestructurar meco-core desde cero con arquitectura de 3 niveles", date: "2026-10-02" },
+        { id: "cd2", hash: "4430ff0", tag: null, x: 370, msg: "feat(meco): concise responses, Castellano strict & atomic watchdog", date: "2026-10-28" }
+      ]
+    },
+    "core:features": {
+      key: "core:features",
+      repo: "Eduardiker/meco-core",
+      repoUrl: "https://github.com/Eduardiker/meco-core/branches",
+      name: "feature/modules-n2",
+      type: "feature",
+      laneY: 260,
+      color: "#a78bfa",
+      badge: "Feature · Módulos SAM, MAM, VAM",
+      desc: "Rama de trabajo para los nuevos módulos estructurales del Microkernel: Gobernanza criptográfica (SAM), autovacuna glibc malloc_trim (MAM) y watchdog de failover (VAM).",
+      protection: [
+        "Desarrollo modular bajo modules/<name>/",
+        "Contrato de ciclo de vida obligatorio"
+      ],
+      cmd: "git checkout -b feature/modules-n2 origin/develop",
+      commits: [
+        { id: "cf1", hash: "c0d7a2b", tag: null, x: 280, msg: "feat(n2): integración de SAM, MAM (malloc_trim) y VAM watchdog", date: "2026-10-18" }
+      ]
+    },
+    "hub:main": {
+      key: "hub:main",
+      repo: "Eduardiker/meco-hub",
+      repoUrl: "https://github.com/Eduardiker/meco-hub",
+      name: "main (meco-hub)",
+      type: "hub",
+      laneY: 330,
+      color: "#ec4899",
+      badge: "Plugins · meco-hub Producción",
+      desc: "Repositorio 100% desacoplado que contiene los 14 plugins oficiales certificados de M.E.C.O. bajo el estándar estricto de 2 bloques (calls.py ➔ actions.py).",
+      protection: [
+        "Manifiesto manifest.json con SHA-256 verificado en CI",
+        "Aislamiento estricto bajo MecoContext con circuit breakers"
+      ],
+      cmd: "git clone https://github.com/Eduardiker/meco-hub.git",
+      commits: [
+        { id: "ch1", hash: "fb0af4c", tag: "hub-v2.1", x: 160, msg: "Release oficial M.E.C.O. v2.0 Modular Architecture (14 plugins certificados)", date: "2026-09-20" },
+        { id: "ch2", hash: "5e3024e", tag: "hub-v3.0", x: 500, msg: "feat: registro SHA-256 de los 14 plugins oficiales bajo MecoContext", date: "2026-11-22" }
+      ]
+    },
+    "hub:features": {
+      key: "hub:features",
+      repo: "Eduardiker/meco-hub",
+      repoUrl: "https://github.com/Eduardiker/meco-hub/branches",
+      name: "feature/sentinel-canary",
+      type: "feature",
+      laneY: 395,
+      color: "#f43f5e",
+      badge: "Feature · Sentinel & Media",
+      desc: "Desarrollo del escudo anti-ransomware inotify (<50ms), verificación de integridad FIM SHA-256, radar ARP y watchdog de torrents zero-seed.",
+      protection: [
+        "Aislamiento de llamadas al sistema operativo"
+      ],
+      cmd: "git clone -b feature/sentinel-canary https://github.com/Eduardiker/meco-hub.git",
+      commits: [
+        { id: "chf1", hash: "2bf264a", tag: null, x: 250, msg: "feat(security_sentinel): wire interactive handlers for LAN trust, ban, bunker", date: "2026-10-14" },
+        { id: "chf2", hash: "80703d3", tag: null, x: 410, msg: "feat(media_arr): zero-seed watchdog, ffprobe validator and quarantine", date: "2026-11-04" }
+      ]
+    },
+    "web:pages": {
+      key: "web:pages",
+      repo: "Eduardiker/meco",
+      repoUrl: "https://github.com/Eduardiker/meco",
+      name: "main (GitHub Pages)",
+      type: "pages",
+      laneY: 460,
+      color: "#2dd4bf",
+      badge: "Web · GitHub Pages Live",
+      desc: "Repositorio público desplegado en https://eduardiker.github.io/meco/. Contiene el portal showcase interactivo, el simulador PAM y el portal técnico independiente meco.docs.",
+      protection: [
+        "Despliegue continuo automático a https://eduardiker.github.io/meco/",
+        "Cero dependencias de backend externo"
+      ],
+      cmd: "git clone https://github.com/Eduardiker/meco.git",
+      commits: [
+        { id: "cw1", hash: "738074f", tag: "pages-live", x: 680, msg: "feat: segregar meco.docs en página independiente estilo GLPI/ReadTheDocs", date: "2026-11-26" },
+        { id: "cw2", hash: "HEAD", tag: "latest", x: 800, msg: "feat: refinar árbol interactivo y añadir topología de ramas de GitHub", date: "2026-11-26" }
+      ]
+    }
+  },
+  links: [
+    // core flow: main -> develop -> feature -> develop -> release -> main
+    { fromX: 100, fromY: 65, toX: 200, toY: 195, color: "#f59e0b" },
+    { fromX: 200, fromY: 195, toX: 280, toY: 260, color: "#a78bfa" },
+    { fromX: 280, fromY: 260, toX: 370, toY: 195, color: "#f59e0b" },
+    { fromX: 370, fromY: 195, toX: 440, toY: 130, color: "#38bdf8" },
+    { fromX: 440, fromY: 130, toX: 570, toY: 65, color: "#10b981" },
+    
+    // hub flow: main -> feature -> main
+    { fromX: 160, fromY: 330, toX: 250, toY: 395, color: "#f43f5e" },
+    { fromX: 250, fromY: 395, toX: 410, toY: 395, color: "#f43f5e" },
+    { fromX: 410, fromY: 395, toX: 500, toY: 330, color: "#ec4899" },
+    
+    // web deploy flow: core main & hub main -> web pages
+    { fromX: 570, fromY: 65, toX: 680, toY: 460, color: "#2dd4bf" },
+    { fromX: 500, fromY: 330, toX: 680, toY: 460, color: "#2dd4bf" },
+    { fromX: 680, fromY: 460, toX: 800, toY: 460, color: "#2dd4bf" }
+  ]
+};
+
+let activeSelectedGitKey = "core:main";
+let activeSelectedCommitId = "cm2";
+
+function renderGitBranches(filterRepo = "all") {
+  const svg = document.getElementById("gitBranchesSvg");
+  if (!svg) return;
+
+  svg.innerHTML = `
+    <defs>
+      <filter id="gitGlow" x="-30%" y="-30%" width="160%" height="160%">
+        <feGaussianBlur stdDeviation="3.5" result="blur" />
+        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+      </filter>
+    </defs>
+  `;
+
+  // Draw Lane Guidelines & Labels
+  Object.keys(GITHUB_TOPOLOGY_DATA.branches).forEach(key => {
+    const branch = GITHUB_TOPOLOGY_DATA.branches[key];
+    if (filterRepo !== "all" && branch.repoId !== filterRepo) return;
+
+    // Guideline
+    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    line.setAttribute("x1", "40");
+    line.setAttribute("y1", branch.laneY);
+    line.setAttribute("x2", "850");
+    line.setAttribute("y2", branch.laneY);
+    line.setAttribute("stroke", "rgba(255, 255, 255, 0.08)");
+    line.setAttribute("stroke-dasharray", "4 6");
+    svg.appendChild(line);
+
+    // Lane Label
+    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    text.setAttribute("x", "40");
+    text.setAttribute("y", branch.laneY - 10);
+    text.setAttribute("class", "git-lane-label");
+    text.setAttribute("fill", branch.color);
+    text.textContent = `${branch.repo.split("/")[1]}:${branch.name}`;
+    svg.appendChild(text);
+  });
+
+  // Draw Merge & Branch Connection Curves
+  GITHUB_TOPOLOGY_DATA.links.forEach(link => {
+    const midX = link.fromX + (link.toX - link.fromX) * 0.5;
+    const pathData = `M ${link.fromX} ${link.fromY} C ${midX} ${link.fromY}, ${midX} ${link.toY}, ${link.toX} ${link.toY}`;
+    
+    const pathElem = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    pathElem.setAttribute("d", pathData);
+    pathElem.setAttribute("class", "git-branch-line pulse-flow");
+    pathElem.setAttribute("stroke", link.color);
+    svg.appendChild(pathElem);
+  });
+
+  // Draw Commits for each branch
+  Object.keys(GITHUB_TOPOLOGY_DATA.branches).forEach(key => {
+    const branch = GITHUB_TOPOLOGY_DATA.branches[key];
+    if (filterRepo !== "all" && branch.repoId !== filterRepo) return;
+
+    branch.commits.forEach(commit => {
+      const isSelected = (activeSelectedCommitId === commit.id);
+
+      const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      group.setAttribute("class", "git-commit-node");
+      group.setAttribute("id", `commit-${commit.id}`);
+
+      // Outer pulse ring if selected
+      if (isSelected) {
+        const ring = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        ring.setAttribute("cx", commit.x);
+        ring.setAttribute("cy", branch.laneY);
+        ring.setAttribute("r", 15);
+        ring.setAttribute("fill", "none");
+        ring.setAttribute("stroke", branch.color);
+        ring.setAttribute("stroke-width", 2);
+        ring.setAttribute("filter", "url(#gitGlow)");
+        group.appendChild(ring);
+      }
+
+      // Core Commit Circle
+      const coreCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      coreCircle.setAttribute("cx", commit.x);
+      coreCircle.setAttribute("cy", branch.laneY);
+      coreCircle.setAttribute("r", isSelected ? 8 : 6);
+      coreCircle.setAttribute("fill", branch.color);
+      coreCircle.setAttribute("stroke", "#090c13");
+      coreCircle.setAttribute("stroke-width", 2.5);
+      coreCircle.setAttribute("class", "commit-core");
+      group.appendChild(coreCircle);
+
+      // Commit Hash Label
+      const hashText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      hashText.setAttribute("x", commit.x);
+      hashText.setAttribute("y", branch.laneY + 22);
+      hashText.setAttribute("text-anchor", "middle");
+      hashText.setAttribute("class", "git-commit-hash");
+      hashText.textContent = commit.hash;
+      group.appendChild(hashText);
+
+      // Tag Pill if exists
+      if (commit.tag) {
+        const tagG = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        
+        const tagRect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        tagRect.setAttribute("x", commit.x - 30);
+        tagRect.setAttribute("y", branch.laneY - 26);
+        tagRect.setAttribute("width", 60);
+        tagRect.setAttribute("height", 16);
+        tagRect.setAttribute("class", "git-commit-tag-rect");
+        tagRect.setAttribute("fill", branch.color);
+        tagRect.setAttribute("opacity", "0.9");
+        tagG.appendChild(tagRect);
+
+        const tagLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        tagLabel.setAttribute("x", commit.x);
+        tagLabel.setAttribute("y", branch.laneY - 14);
+        tagLabel.setAttribute("text-anchor", "middle");
+        tagLabel.setAttribute("class", "git-commit-tag-text");
+        tagLabel.textContent = commit.tag;
+        tagG.appendChild(tagLabel);
+
+        group.appendChild(tagG);
+      }
+
+      // Click event
+      group.addEventListener("click", () => {
+        selectGitBranch(key, commit.id);
+      });
+
+      svg.appendChild(group);
+    });
+  });
+}
+
+function selectGitBranch(branchKey, commitId) {
+  activeSelectedGitKey = branchKey;
+  activeSelectedCommitId = commitId;
+
+  const branch = GITHUB_TOPOLOGY_DATA.branches[branchKey];
+  if (!branch) return;
+
+  const commit = branch.commits.find(c => c.id === commitId) || branch.commits[0];
+
+  const inspector = document.getElementById("gitInspector");
+  if (!inspector) return;
+
+  inspector.innerHTML = `
+    <div>
+      <span class="git-insp-badge" style="background: rgba(255,255,255,0.08); color: ${branch.color}; border: 1px solid ${branch.color};">
+        ${branch.badge}
+      </span>
+      <h3 class="git-insp-title">${branch.name}</h3>
+      <a href="${branch.repoUrl}" target="_blank" rel="noopener noreferrer" class="git-insp-repo">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+        </svg>
+        ${branch.repo} &rarr;
+      </a>
+
+      <p style="font-size: 0.875rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1.25rem;">
+        ${branch.desc}
+      </p>
+
+      <div class="git-commit-card">
+        <div class="git-commit-header">
+          <span>COMMIT HASH</span>
+          <span class="git-commit-sha">${commit ? commit.hash : 'HEAD'} ${commit && commit.tag ? `<span style="background:${branch.color}; color:#000; padding:1px 5px; border-radius:3px; font-size:0.7rem; font-weight:800;">${commit.tag}</span>` : ''}</span>
+        </div>
+        <p class="git-commit-message">${commit ? commit.msg : 'Última versión del repositorio'}</p>
+        <div style="font-size:0.725rem; color:var(--text-dim); margin-top:0.4rem;">
+          Autor: <strong>${commit ? commit.author : 'M.E.C.O.'}</strong> · Fecha: ${commit ? commit.date : '2026-11-26'}
+        </div>
+      </div>
+
+      <div class="git-rules-box">
+        <strong style="color: #cbd5e1; font-size: 0.775rem;">REGLAS DE GOBERNANZA GIT:</strong>
+        ${branch.protection.map(r => `
+          <div class="git-rule-item">
+            <span style="color: ${branch.color};">✓</span>
+            <span>${r}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <div>
+      <div class="git-cmd-box">
+        <code>${branch.cmd}</code>
+      </div>
+      <a href="${branch.repoUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm" style="width: 100%; text-align: center;">
+        Ver en GitHub &rarr;
+      </a>
+    </div>
+  `;
+
+  // Re-render SVG to update active node ring
+  renderGitBranches(currentActiveGitFilter);
+}
+
+let currentActiveGitFilter = "all";
+
 // 6. INITIALIZATION & EVENT LISTENERS
 // ==============================================================================
 document.addEventListener("DOMContentLoaded", () => {
-  // 1. Initial Tree Render
+  // 1. Initial Architecture Tree Render
   renderBranchTree("all");
   selectBranchNode("root");
+
+  // 1.5 Initial Git Branches Render
+  renderGitBranches("all");
+  selectGitBranch("core:main", "cm2");
+
+  // Git repo filter tabs
+  document.querySelectorAll(".git-tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".git-tab-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      currentActiveGitFilter = btn.dataset.gitfilter;
+      renderGitBranches(currentActiveGitFilter);
+    });
+  });
 
   // Filter buttons for Tree
   document.querySelectorAll(".filter-btn").forEach(btn => {

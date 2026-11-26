@@ -601,6 +601,282 @@ code, pre {
   gap: 0.5rem;
 }
 
+/* Animación de flujo de datos en las ramas arquitectónicas */
+@keyframes flowDash {
+  0% { stroke-dashoffset: 48; }
+  100% { stroke-dashoffset: 0; }
+}
+
+.svg-branch-link.pulse-flow {
+  stroke-dasharray: 6 8;
+  animation: flowDash 1.2s linear infinite;
+}
+
+/* ==============================================================================
+   GIT BRANCHES & WORKFLOW SECTION (Topología y Ramas de GitHub)
+   ============================================================================== */
+.git-branches-section {
+  padding: 4.5rem 0;
+  background: radial-gradient(circle at 50% 10%, rgba(56, 189, 248, 0.04), transparent 70%);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.git-flow-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+.git-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: rgba(13, 18, 29, 0.95);
+  border-bottom: 1px solid var(--border-subtle);
+  gap: 1rem;
+}
+
+.git-repo-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.git-tab-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  padding: 0.45rem 0.95rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.git-tab-btn:hover, .git-tab-btn.active {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+.git-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.15rem;
+  font-size: 0.775rem;
+  font-family: var(--font-mono);
+}
+
+.git-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--text-muted);
+}
+
+.git-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.git-dot.main { background: #10b981; box-shadow: 0 0 6px rgba(16, 185, 129, 0.6); }
+.git-dot.release { background: #38bdf8; box-shadow: 0 0 6px rgba(56, 189, 248, 0.6); }
+.git-dot.develop { background: #f59e0b; box-shadow: 0 0 6px rgba(245, 158, 11, 0.6); }
+.git-dot.feature { background: #a78bfa; box-shadow: 0 0 6px rgba(167, 139, 250, 0.6); }
+.git-dot.hotfix { background: #f43f5e; box-shadow: 0 0 6px rgba(244, 63, 94, 0.6); }
+
+.git-workbench {
+  display: grid;
+  grid-template-columns: 1.75fr 1fr;
+  min-height: 520px;
+}
+
+@media (max-width: 992px) {
+  .git-workbench {
+    grid-template-columns: 1fr;
+  }
+}
+
+.git-canvas-container {
+  position: relative;
+  background: radial-gradient(circle at 45% 45%, rgba(15, 23, 42, 0.5) 0%, #060910 100%);
+  padding: 1.75rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-x: auto;
+  min-height: 480px;
+}
+
+#gitBranchesSvg {
+  width: 100%;
+  max-width: 860px;
+  height: auto;
+  min-height: 440px;
+}
+
+.git-lane-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  fill: #94a3b8;
+  letter-spacing: 0.03em;
+}
+
+.git-branch-line {
+  fill: none;
+  stroke-width: 2.4;
+  opacity: 0.85;
+  transition: all 0.25s ease;
+}
+
+.git-branch-line.active {
+  stroke-width: 3.5;
+  opacity: 1;
+}
+
+.git-commit-node {
+  cursor: pointer;
+}
+
+.git-commit-node:hover circle.commit-core {
+  filter: drop-shadow(0 0 8px currentColor);
+}
+
+.git-commit-hash {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  fill: #cbd5e1;
+}
+
+.git-commit-tag-rect {
+  rx: 4px;
+  ry: 4px;
+}
+
+.git-commit-tag-text {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  fill: #ffffff;
+}
+
+/* Git Inspector */
+.git-inspector {
+  background: rgba(10, 14, 23, 0.96);
+  border-left: 1px solid var(--border-subtle);
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.git-insp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.725rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.git-insp-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 0.25rem;
+}
+
+.git-insp-repo {
+  font-family: var(--font-mono);
+  font-size: 0.825rem;
+  color: #38bdf8;
+  margin-bottom: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  text-decoration: none;
+}
+
+.git-insp-repo:hover {
+  text-decoration: underline;
+}
+
+.git-commit-card {
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.git-commit-header {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.775rem;
+  color: var(--text-dim);
+  margin-bottom: 0.45rem;
+}
+
+.git-commit-sha {
+  color: var(--accent-modules);
+  font-weight: 700;
+}
+
+.git-commit-message {
+  font-size: 0.85rem;
+  color: #e2e8f0;
+  line-height: 1.5;
+}
+
+.git-rules-box {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.78rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.git-rule-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-muted);
+}
+
+.git-cmd-box {
+  position: relative;
+  background: #05070a;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.775rem;
+  color: #a5f3fc;
+  overflow-x: auto;
+  margin-bottom: 1.25rem;
+}
+
 /* ==============================================================================
    LIVE SIMULATOR SECTION (Consola Interactiva PAM / Core)
    ============================================================================== */
