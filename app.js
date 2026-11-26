@@ -319,6 +319,13 @@ const MECO_PLUGINS = [
     sha256: "52471422142e874689c4f6a8b26589fee8f83ddc85b06158d45adeec19aa3a96",
     path: "plugins/security_sentinel",
     permissions: ["core:admin", "core:storage", "pam:interact", "cam:internet", "system:exec"],
+    module_deps: {
+      pam: true,
+      cam_net: true,
+      cam_ipc: true,
+      core: ["core:admin", "core:storage", "system:exec"]
+    },
+    dep_explanation: "Depende de PAM para emitir alertas formateadas al usuario ante brechas canario. Depende de CAM (Internet) para consultar bases de vulnerabilidades OSV.dev y reputación AbuseIPDB. Depende de CAM (Bus IPC) para emitir eventos de emergencia Prioridad 1 a Telegram y Ntfy.",
     commands: ["/seguridad", "/bunker", "/escaner_cve"]
   },
   {
@@ -332,6 +339,13 @@ const MECO_PLUGINS = [
     sha256: "039a99da6a1268530ff32dd1080bf4d8e146583c8487b97f59cbd6be40dac126",
     path: "plugins/homelab_ops",
     permissions: ["cam:internet", "core:storage", "system:exec"],
+    module_deps: {
+      pam: false,
+      cam_net: true,
+      cam_ipc: false,
+      core: ["core:storage", "system:exec"]
+    },
+    dep_explanation: "Depende de CAM (Internet/Red) para sondear endpoints HTTP de AdGuard Home y Uptime Kuma. No interactúa directamente con el usuario (delega sus respuestas en Telegram o la consola local). Depende de Core (system:exec) para leer sensores de CPU térmicos N100 y SMART SSD.",
     commands: ["/homelab", "/docker", "/temperatura", "/smart"]
   },
   {
@@ -345,6 +359,13 @@ const MECO_PLUGINS = [
     sha256: "fcffa8915715b116822afa28908553a8e8680c5a40312a45f3579c871cf0b50a",
     path: "plugins/emergency_p2p",
     permissions: ["core:admin", "cam:ipc", "cam:internet"],
+    module_deps: {
+      pam: false,
+      cam_net: false,
+      cam_ipc: true,
+      core: ["core:admin"]
+    },
+    dep_explanation: "100% Autónomo y Offline ante cortes de red externa. Depende de CAM (Bus IPC) para recibir la señal de desconexión del gestor de red. Despierta un socket UDP de rescate cifrado sin consumir CPU en espera.",
     commands: ["/p2p_mesh", "/baliza"]
   },
   {
@@ -358,6 +379,13 @@ const MECO_PLUGINS = [
     sha256: "a81305cf35f3584949dcf7ca4499698c3511127ef2fa8d76f4178a14fe92198e",
     path: "plugins/telegram",
     permissions: ["pam:interact", "cam:internet", "core:admin", "cam:ipc"],
+    module_deps: {
+      pam: true,
+      cam_net: true,
+      cam_ipc: true,
+      core: ["core:admin"]
+    },
+    dep_explanation: "Dependencia crítica de PAM: Todo texto enviado por Telegram es procesado y normalizado por el ResponseAdapter de PAM. Depende de CAM (Internet) para el long-polling con la API de Telegram y de CAM (Bus IPC) para recibir notificaciones emitidas por cualquier otro plugin.",
     commands: ["/start", "/ayuda", "/estado", "/menu"]
   },
   {
@@ -371,6 +399,13 @@ const MECO_PLUGINS = [
     sha256: "0ed32309f33c0324095e740804d6bcb0edad9d101447fbaaf95e5d5b84889a4b",
     path: "plugins/sovereign_engine",
     permissions: ["core:admin", "core:storage", "system:exec"],
+    module_deps: {
+      pam: true,
+      cam_net: false,
+      cam_ipc: false,
+      core: ["core:admin", "core:storage", "system:exec"]
+    },
+    dep_explanation: "Opera estrictamente en LAN local (:8899) sin depender de salida externa de CAM Internet. Depende de PAM para adaptar las respuestas a las peticiones HTTP lanzadas desde la consola web LAN.",
     commands: ["/reparar_bbdd", "/diagnostico_red"]
   },
   {
@@ -384,6 +419,13 @@ const MECO_PLUGINS = [
     sha256: "81f9edafeaeac60bb4df5eb35c8ad7c4289cedbf208c48714a0715fe30b68478",
     path: "plugins/ai_voice_finance",
     permissions: ["pam:interact", "cam:internet", "core:storage"],
+    module_deps: {
+      pam: true,
+      cam_net: true,
+      cam_ipc: false,
+      core: ["core:storage"]
+    },
+    dep_explanation: "Depende de PAM para estructurar respuestas conversacionales al usuario. Depende de CAM (Internet) únicamente cuando se delega en APIs en la nube (Groq/Gemini); si se usa faster-whisper local opera sin salida externa.",
     commands: ["/gasto", "/balance", "/nota_voz", "/preguntar_ia"]
   },
   {
@@ -397,6 +439,13 @@ const MECO_PLUGINS = [
     sha256: "f52a2e0cf300c2993fc84ff7823b59bdc3a4174b6acfd65963674edcfd2d281c",
     path: "plugins/butler_media",
     permissions: ["cam:internet", "core:storage", "pam:interact"],
+    module_deps: {
+      pam: true,
+      cam_net: true,
+      cam_ipc: false,
+      core: ["core:storage"]
+    },
+    dep_explanation: "Depende de PAM para generar briefings amigables y formatear listas de compras. Depende de CAM (Internet) para obtener la tarifa eléctrica horaria de Red Eléctrica de España (PVPC) y metadatos de audio en MusicBrainz.",
     commands: ["/briefing", "/tarifa_luz", "/musica", "/compras"]
   },
   {
@@ -410,6 +459,13 @@ const MECO_PLUGINS = [
     sha256: "ee8cea9f4305991100783631598add802347686435e0a369d0a6adc6d6471e68",
     path: "plugins/pwa_console",
     permissions: ["core:admin", "pam:interact"],
+    module_deps: {
+      pam: true,
+      cam_net: false,
+      cam_ipc: false,
+      core: ["core:admin"]
+    },
+    dep_explanation: "Depende de PAM para adaptar la telemetría en streaming Server-Sent Events (SSE) hacia la Progressive Web App. Funciona en red local sin necesidad de CAM Internet.",
     commands: ["/pwa_link", "/push_token"]
   },
   {
@@ -423,6 +479,13 @@ const MECO_PLUGINS = [
     sha256: "e35dd8c8d7257218205729731383cbc171a079fb8ab7ea7635de16024abfd986",
     path: "plugins/family_bridge",
     permissions: ["cam:ipc", "pam:interact"],
+    module_deps: {
+      pam: true,
+      cam_net: false,
+      cam_ipc: true,
+      core: []
+    },
+    dep_explanation: "Depende de PAM para el lenguaje cercano e interactivo en diálogos familiares. Depende críticamente de CAM (Bus IPC) para coordinar la validación de gastos y transacciones con ai_voice_finance.",
     commands: ["/aprobar_gasto", "/mensaje_familiar"]
   },
   {
@@ -436,6 +499,13 @@ const MECO_PLUGINS = [
     sha256: "07818e1fbc68402596ae6b7f62420601df1241e3934ef6e58141ad3d97d410b0",
     path: "plugins/ntfy_gateway",
     permissions: ["cam:internet", "core:events"],
+    module_deps: {
+      pam: false,
+      cam_net: true,
+      cam_ipc: true,
+      core: ["core:events"]
+    },
+    dep_explanation: "Depende de CAM (Bus IPC) para escuchar eventos de todos los plugins y de CAM (Internet) para despachar peticiones HTTP POST al servidor Ntfy.",
     commands: ["/notificar", "/test_push"]
   },
   {
@@ -449,6 +519,13 @@ const MECO_PLUGINS = [
     sha256: "d418d3fecba66f821d988ed4b4b9554b3c675cb04ba71d7bfd26e945ac893aba",
     path: "plugins/media_arr_ops",
     permissions: ["cam:internet", "system:exec"],
+    module_deps: {
+      pam: false,
+      cam_net: true,
+      cam_ipc: false,
+      core: ["system:exec"]
+    },
+    dep_explanation: "Depende de CAM (Internet / Red) para comunicarse con las APIs REST de los servicios Sonarr, Radarr y clientes de torrents.",
     commands: ["/descargas", "/buscar_peli", "/limpiar_arr"]
   },
   {
@@ -462,6 +539,13 @@ const MECO_PLUGINS = [
     sha256: "3ee9f913f535f4dc211979f30e0b8f2b8694ddbda8689c77bd99bc0025b29e9a",
     path: "plugins/mesh_vpn_controller",
     permissions: ["system:exec", "core:admin"],
+    module_deps: {
+      pam: false,
+      cam_net: false,
+      cam_ipc: false,
+      core: ["system:exec", "core:admin"]
+    },
+    dep_explanation: "Controlador de bajo nivel. No requiere módulos PAM ni CAM: interactúa directamente con el kernel de Linux (wg, tailscale status) mediante system:exec del Core.",
     commands: ["/vpn_status", "/peers", "/bloquear_peer"]
   },
   {
@@ -475,6 +559,13 @@ const MECO_PLUGINS = [
     sha256: "5c4b7b181bf8cbf6a190f0491c01916fb213319d0c035ec48d74de2e623d10f7",
     path: "plugins/smarthome_bridge",
     permissions: ["cam:internet", "cam:ipc"],
+    module_deps: {
+      pam: false,
+      cam_net: true,
+      cam_ipc: true,
+      core: []
+    },
+    dep_explanation: "Depende de CAM (Red/Internet) para dialogar con Home Assistant y de CAM (Bus IPC) para propagar estados domóticos a otros módulos.",
     commands: ["/luces", "/clima", "/automatizaciones"]
   },
   {
@@ -488,6 +579,13 @@ const MECO_PLUGINS = [
     sha256: "2c3c79cba5fcd9994e0af00e436a206b59117e93b91c3d042f170c39d68a7908",
     path: "plugins/phoenix_cloud_sync",
     permissions: ["system:exec", "core:storage"],
+    module_deps: {
+      pam: false,
+      cam_net: true,
+      cam_ipc: false,
+      core: ["system:exec", "core:storage"]
+    },
+    dep_explanation: "Depende de CAM (Internet) para la sincronización con almacenamiento cloud (Google Drive, S3, Dropbox) y de Core (system:exec) para lanzar el binario rclone.",
     commands: ["/fenix_backup", "/sincronizar_nube"]
   }
 ];
@@ -850,7 +948,7 @@ function runSimulatorCommand(rawCmd) {
   // Add User Command Line
   const promptLine = document.createElement("div");
   promptLine.className = "terminal-prompt-line";
-  promptLine.innerHTML = `<span style="color:#2dd4bf">antigravity@meco:~$</span> <span class="user-prompt">${escapeHtml(cmd)}</span>`;
+  promptLine.innerHTML = `<span style="color:#2dd4bf">iker@homelab:~$</span> <span class="user-prompt">${escapeHtml(cmd)}</span>`;
   terminalBody.appendChild(promptLine);
 
   // Command logic
@@ -944,6 +1042,15 @@ function renderPlugins(category = "all", searchTerm = "") {
           ${p.critical ? 'Crítico' : 'Oficial'}
         </span>
       </div>
+      
+      <!-- Etiquetas de Dependencias de Módulos Nativos -->
+      <div class="plugin-deps-row">
+        ${p.module_deps.pam ? '<span class="dep-tag dep-tag-pam">Módulo PAM</span>' : ''}
+        ${p.module_deps.cam_net ? '<span class="dep-tag dep-tag-cam-net">CAM: Internet</span>' : ''}
+        ${p.module_deps.cam_ipc ? '<span class="dep-tag dep-tag-cam-ipc">CAM: Bus IPC</span>' : ''}
+        ${(!p.module_deps.pam && !p.module_deps.cam_net && !p.module_deps.cam_ipc) ? '<span class="dep-tag dep-tag-local">100% Autónomo / Local</span>' : ''}
+      </div>
+
       <p class="plugin-desc">${p.desc}</p>
       <div class="plugin-footer">
         <span class="plugin-meta">v${p.version} • ${p.commands.length} comandos</span>
@@ -971,6 +1078,12 @@ function openPluginModal(pluginId) {
   document.getElementById("modalPluginPath").textContent = p.path;
   document.getElementById("modalPluginAuthor").textContent = p.author;
   
+  // Dependencia de módulos nativos
+  const depBox = document.getElementById("modalPluginDepExplanation");
+  if (depBox) {
+    depBox.textContent = p.dep_explanation || "No declara dependencias de módulos nativos.";
+  }
+
   // Permissions chips
   const permsBox = document.getElementById("modalPluginPerms");
   permsBox.innerHTML = p.permissions.map(perm => `<span class="cmd-badge">${perm}</span>`).join(" ");
@@ -987,6 +1100,38 @@ function closePluginModal() {
   if (modalOverlay) {
     modalOverlay.classList.remove("active");
   }
+}
+
+// Renderizar Matriz de Dependencias
+function renderMatrixTable() {
+  const tbody = document.getElementById("matrixTableBody");
+  if (!tbody) return;
+
+  tbody.innerHTML = MECO_PLUGINS.map(p => `
+    <tr>
+      <td>
+        <strong style="color:var(--text-main)">${p.name}</strong><br>
+        <code style="font-size:0.75rem; color:var(--text-dim)">${p.path}</code>
+      </td>
+      <td>
+        <span class="plugin-badge-pill ${p.critical ? 'pill-critical' : 'pill-official'}">
+          ${p.critical ? 'Crítico' : 'Oficial'}
+        </span>
+      </td>
+      <td style="text-align: center;">
+        ${p.module_deps.pam ? '<span class="matrix-check" title="Depende de PAM para adaptar respuestas">✓</span>' : '<span class="matrix-cross">—</span>'}
+      </td>
+      <td style="text-align: center;">
+        ${p.module_deps.cam_net ? '<span class="matrix-check" title="Depende de CAM para peticiones HTTP">✓</span>' : '<span class="matrix-cross">—</span>'}
+      </td>
+      <td style="text-align: center;">
+        ${p.module_deps.cam_ipc ? '<span class="matrix-check" title="Depende de CAM para Bus IPC">✓</span>' : '<span class="matrix-cross">—</span>'}
+      </td>
+      <td>
+        <code style="font-size:0.75rem">${p.module_deps.core.join(', ') || 'Ninguno'}</code>
+      </td>
+    </tr>
+  `).join("");
 }
 
 // ==============================================================================
@@ -1020,17 +1165,36 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // 3. Plugins Catalog Filters & Search
+  // 3. Plugins Catalog Filters, Search & Dependency Matrix
   renderPlugins("all", "");
+  renderMatrixTable();
 
   document.querySelectorAll(".chip[data-category]").forEach(chip => {
+    if (chip.id === "btnToggleMatrix") return; // Handled separately
     chip.addEventListener("click", () => {
-      document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+      document.querySelectorAll(".chip").forEach(c => {
+        if (c.id !== "btnToggleMatrix") c.classList.remove("active");
+      });
       chip.classList.add("active");
       const searchVal = document.getElementById("pluginSearch")?.value || "";
       renderPlugins(chip.dataset.category, searchVal);
     });
   });
+
+  // Toggle Matrix Button
+  const btnToggleMatrix = document.getElementById("btnToggleMatrix");
+  const matrixContainer = document.getElementById("matrixContainer");
+  if (btnToggleMatrix && matrixContainer) {
+    btnToggleMatrix.addEventListener("click", () => {
+      const isHidden = matrixContainer.style.display === "none";
+      matrixContainer.style.display = isHidden ? "block" : "none";
+      btnToggleMatrix.classList.toggle("active", isHidden);
+      btnToggleMatrix.textContent = isHidden ? "✕ Ocultar Matriz de Dependencias" : "📊 Ver Matriz de Dependencias";
+      if (isHidden) {
+        matrixContainer.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+    });
+  }
 
   const searchInput = document.getElementById("pluginSearch");
   if (searchInput) {

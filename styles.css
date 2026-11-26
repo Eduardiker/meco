@@ -24,6 +24,8 @@
   --accent-amber: #fbbf24;      /* Warnings / Offline */
   --accent-emerald: #34d399;    /* Healthy / OK */
   --accent-rose: #f43f5e;       /* Critical */
+  --accent-cam: #38bdf8;        /* CAM Network */
+  --accent-pam: #14b8a6;        /* PAM Interaction */
   
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', Menlo, Consolas, monospace;
@@ -1168,4 +1170,170 @@ code, pre {
 
 .modal-close:hover {
   color: var(--text-main);
+}
+
+/* ==============================================================================
+   DIFERENCIACIÓN: MÓDULOS DEL SISTEMA VS PLUGINS DESACOPLADOS
+   ============================================================================== */
+.arch-diff-banner {
+  background: linear-gradient(135deg, rgba(20, 184, 166, 0.08), rgba(56, 189, 248, 0.08));
+  border: 1px solid rgba(45, 212, 191, 0.25);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 2.5rem;
+}
+
+.diff-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.diff-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.diff-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .diff-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.diff-box {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.1rem;
+}
+
+.diff-box-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+.diff-box p {
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+.diff-deps-hint {
+  margin-top: 1rem;
+  padding-top: 0.85rem;
+  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+  font-size: 0.825rem;
+  color: #a5f3fc;
+}
+
+/* Dependency Badges */
+.plugin-deps-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.85rem;
+}
+
+.dep-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.dep-tag-pam {
+  background: rgba(20, 184, 166, 0.14);
+  color: #2dd4bf;
+  border: 1px solid rgba(45, 212, 191, 0.3);
+}
+
+.dep-tag-cam-net {
+  background: rgba(56, 189, 248, 0.14);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.dep-tag-cam-ipc {
+  background: rgba(167, 139, 250, 0.14);
+  color: #c4b5fd;
+  border: 1px solid rgba(167, 139, 250, 0.3);
+}
+
+.dep-tag-local {
+  background: rgba(245, 158, 11, 0.14);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+/* Dependency Matrix Table */
+.matrix-container {
+  overflow-x: auto;
+  margin-top: 2rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+}
+
+.matrix-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.825rem;
+  text-align: left;
+}
+
+.matrix-table th {
+  padding: 0.85rem 1rem;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  font-size: 0.725rem;
+  border-bottom: 1px solid var(--border-medium);
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.matrix-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+}
+
+.matrix-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text-main);
+}
+
+.matrix-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(45, 212, 191, 0.15);
+  color: #2dd4bf;
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.matrix-cross {
+  color: var(--text-dim);
+  font-size: 0.85rem;
 }

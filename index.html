@@ -214,7 +214,7 @@ python3 meco.py --daemon
             <span class="t-btn t-max"></span>
           </div>
 
-          <span class="terminal-title">meco@homelab: ~ (meco.py --daemon)</span>
+          <span class="terminal-title">iker@homelab: ~ (meco.py --daemon)</span>
 
           <!-- Mode Switcher -->
           <div class="terminal-mode-switch">
@@ -256,6 +256,51 @@ python3 meco.py --daemon
         </p>
       </div>
 
+      <!-- BANNER DE DIFERENCIACIÓN: MÓDULOS DEL SISTEMA VS PLUGINS -->
+      <div class="arch-diff-banner">
+        <div class="diff-header">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2dd4bf" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+          <h3 class="diff-title">Diferenciación Clave: Módulos Nativos del Sistema vs Plugins Desacoplados</h3>
+        </div>
+
+        <div class="diff-grid">
+          <div class="diff-box">
+            <h4 class="diff-box-title" style="color: var(--accent-modules);">
+              <span>🏛️ Módulos Nativos (Nivel 2: <code>modules/</code>)</span>
+            </h4>
+            <p>
+              Son <strong>componentes estructurales internos</strong> integrados en el Microkernel Core. No son plugins. Proveen servicios esenciales del sistema:
+            </p>
+            <ul style="margin: 0.5rem 0 0.5rem 1.25rem; font-size: 0.825rem; color: var(--text-muted); line-height: 1.5;">
+              <li><strong>PAM (modules/pam/):</strong> "Pregúntale a Meco". Adapta las respuestas al usuario con 4 perfiles de estilo y gestiona la interacción.</li>
+              <li><strong>CAM (modules/cam/):</strong> "Conecta a Meco". Gobierna la salida a Internet (políticas de dominios, disyuntores, modo offline) y gestiona el Bus IPC inter-plugins con prioridades P1-P3.</li>
+            </ul>
+          </div>
+
+          <div class="diff-box">
+            <h4 class="diff-box-title" style="color: var(--accent-plugins);">
+              <span>🧩 Plugins Desacoplados (Nivel 3: <code>meco-hub</code>)</span>
+            </h4>
+            <p>
+              Son <strong>extensiones y aplicaciones funcionales</strong> 100% externas al código fuente del Core.
+            </p>
+            <ul style="margin: 0.5rem 0 0.5rem 1.25rem; font-size: 0.825rem; color: var(--text-muted); line-height: 1.5;">
+              <li>Siguen el estándar de 2 bloques: <code>calls.py</code> (comandos) ➔ <code>actions.py</code> (lógica).</li>
+              <li>Se aíslan en memoria bajo <code>MecoContext</code> con disyuntores individuales.</li>
+              <li><strong>Dependen de los Módulos Nativos</strong> para interactuar con humanos o salir a la red.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="diff-deps-hint">
+          <strong>⚡ ¿Cómo dependen los Plugins de los Módulos?</strong> Si un plugin desea hablar con el usuario con tono adaptado, <strong>depende de PAM</strong> (permiso <code>pam:interact</code>). Si necesita hacer peticiones a Internet, <strong>depende de CAM Network</strong> (permiso <code>cam:internet</code>). Si necesita avisar a otros plugins de un evento crítico, <strong>depende de CAM IPC Bus</strong> (permiso <code>cam:ipc</code>).
+        </div>
+      </div>
+
       <!-- Filter and Search Bar -->
       <div class="plugins-filter-bar">
         <div class="filter-chips">
@@ -265,12 +310,38 @@ python3 meco.py --daemon
           <button class="chip" data-category="ai">IA y Finanzas</button>
           <button class="chip" data-category="media">Multimedia & Mayordomo</button>
           <button class="chip" data-category="network">Red y Notificaciones</button>
+          <button class="chip" data-category="matrix" id="btnToggleMatrix">📊 Ver Matriz de Dependencias</button>
         </div>
 
         <div class="search-input-wrap">
           <span class="search-icon">&#128269;</span>
           <input type="text" id="pluginSearch" class="search-input" placeholder="Buscar módulo o capacidad...">
         </div>
+      </div>
+
+      <!-- MATRIZ INTERACTIVA DE DEPENDENCIAS DE MÓDULOS -->
+      <div class="matrix-container" id="matrixContainer" style="display: none; margin-bottom: 2.5rem;">
+        <h3 style="font-size: 1.05rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+          <span>📊 Matriz de Dependencias: Plugins ➔ Módulos Nativos y Core</span>
+        </h3>
+        <p style="font-size: 0.825rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+          Muestra qué componentes estructurales del sistema requiere cada plugin para operar. Los permisos son validados estrictamente por el Microkernel en tiempo de ejecución.
+        </p>
+        <table class="matrix-table">
+          <thead>
+            <tr>
+              <th>Plugin (meco-hub)</th>
+              <th>Tipo</th>
+              <th>Módulo PAM (Adaptación / Interfaz)</th>
+              <th>Módulo CAM (Salida Internet)</th>
+              <th>Módulo CAM (Bus IPC)</th>
+              <th>Módulo Core (Storage / Exec)</th>
+            </tr>
+          </thead>
+          <tbody id="matrixTableBody">
+            <!-- Dynamically populated via app.js -->
+          </tbody>
+        </table>
       </div>
 
       <!-- Plugins Grid -->
@@ -444,6 +515,12 @@ plugins:
           <span style="color: var(--text-dim)">SHA-256 (Verificación Hub):</span>
           <span id="modalPluginSha" style="font-family: var(--font-mono); color: #6ee7b7; font-size: 0.72rem; word-break: break-all;"></span>
         </div>
+      <!-- Dependencias de Módulos Nativos -->
+      <div style="background: rgba(20, 184, 166, 0.08); border: 1px solid rgba(45, 212, 191, 0.25); border-radius: var(--radius-sm); padding: 1rem; margin-bottom: 1.25rem;">
+        <h4 style="font-size: 0.8rem; text-transform: uppercase; color: var(--accent-modules); margin-bottom: 0.45rem; letter-spacing: 0.05em; display: flex; align-items: center; gap: 0.4rem;">
+          <span>🔗 Dependencias de Módulos Nativos (Nivel 2):</span>
+        </h4>
+        <p id="modalPluginDepExplanation" style="font-size: 0.825rem; color: #cbd5e1; line-height: 1.55;"></p>
       </div>
 
       <div style="margin-bottom: 1.25rem;">
