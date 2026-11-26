@@ -1491,6 +1491,153 @@ code, pre {
 }
 
 /* ==============================================================================
+   DOCS PORTAL CTA SECTION (SECCIÓN RESUMIDA QUE ENLAZA A LA PESTAÑA DEDICADA)
+   ============================================================================== */
+.docs-portal-cta-section {
+  padding: 5rem 0;
+  background: linear-gradient(180deg, rgba(6, 9, 16, 0.4) 0%, rgba(9, 13, 22, 0.8) 100%);
+}
+
+.docs-portal-card {
+  background: linear-gradient(135deg, rgba(13, 20, 36, 0.95) 0%, rgba(8, 12, 20, 0.98) 100%);
+  border: 1px solid rgba(45, 212, 191, 0.3);
+  border-radius: var(--radius-lg);
+  padding: 3rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(45, 212, 191, 0.2);
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 3rem;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.docs-portal-card::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -20%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(45, 212, 191, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.portal-badge-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.portal-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.portal-version {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+
+.portal-title {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+  margin-bottom: 1rem;
+}
+
+.portal-desc {
+  font-size: 0.975rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+
+.portal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+.btn-lg {
+  padding: 0.85rem 1.65rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.docs-portal-grid-preview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.preview-mini-card {
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  transition: var(--transition);
+}
+
+.preview-mini-card:hover {
+  border-color: var(--accent-modules);
+  background: rgba(45, 212, 191, 0.05);
+  transform: translateY(-2px);
+}
+
+.mini-card-icon {
+  font-size: 1.65rem;
+}
+
+.preview-mini-card strong {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--text-main);
+  margin-bottom: 0.25rem;
+}
+
+.preview-mini-card p {
+  font-size: 0.775rem;
+  color: var(--text-dim);
+  line-height: 1.45;
+  margin: 0;
+}
+
+@media (max-width: 960px) {
+  .docs-portal-card {
+    grid-template-columns: 1fr;
+    padding: 2rem;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .docs-portal-grid-preview {
+    grid-template-columns: 1fr;
+  }
+  .portal-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* ==============================================================================
    NUEVO APARTADO: MÓDULOS NATIVOS DEL SISTEMA (NIVEL 2)
    ============================================================================== */
 .modules-section {

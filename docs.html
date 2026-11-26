@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>meco.docs — Documentación Técnica Oficial de M.E.C.O.</title>
+  <meta name="description" content="Manual de arquitectura técnica, creación de módulos nativos de Nivel 2, estándar de plugins de Nivel 3 y gobernanza de M.E.C.O. (Microkernel Extensible Controlador y Orquestador).">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="docs.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232dd4bf'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
+</head>
+<body>
+
+  <!-- TOP HEADER / NAVBAR -->
+  <header class="docs-header">
+    <div class="header-container">
+      <div class="brand-group">
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Abrir Menú">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+
+        <a href="index.html" class="brand-link">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2dd4bf" stroke-width="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+          <span>M.E.C.O.</span>
+          <span class="brand-badge">v3.0.0</span>
+        </a>
+
+        <span class="docs-title-badge">meco.docs</span>
+      </div>
+
+      <!-- Quick Search Bar -->
+      <div class="header-search">
+        <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" class="search-input" id="docsSearchInput" placeholder="Buscar en la documentación (ej: PAM, CAM, calls.py, permisos)..." autocomplete="off">
+      </div>
+
+      <!-- Header Action Links -->
+      <nav class="header-nav">
+        <a href="index.html" class="nav-btn nav-btn-portal">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          Portal Principal
+        </a>
+        <a href="https://github.com/Eduardiker/meco-core" target="_blank" rel="noopener noreferrer" class="nav-btn nav-btn-github">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          meco-core
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- 3-COLUMN GLPI / DOCUSAURUS LAYOUT -->
+  <div class="docs-layout">
+    
+    <!-- LEFT SIDEBAR: HIERARCHICAL TOPICS TREE -->
+    <aside class="docs-sidebar" id="docsSidebar">
+      
+      <!-- Category 1: Visión General & Arquitectura -->
+      <div class="sidebar-category">
+        <div class="sidebar-category-title">
+          <span>📘</span> 1. Arquitectura & Soberanía
+        </div>
+        <ul class="sidebar-menu">
+          <li class="sidebar-item">
+            <a href="#intro" class="sidebar-link active">
+              <span>Introducción a M.E.C.O.</span>
+              <span class="sidebar-tag">v3.0</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a href="#tres-niveles" class="sidebar-link">
+              <span>Los 3 Niveles Arquitectónicos</span>
+              <span class="sidebar-tag">N1-N3</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a href="#modulos-vs-plugins" class="sidebar-link">
+              <span>Diferencia: Módulos vs Plugins</span>
+              <span class="sidebar-tag">Regla de Oro</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Category 2: Módulos del Sistema (Nivel 2) -->
+      <div class="sidebar-category">
+        <div class="sidebar-category-title">
+          <span>🏛️</span> 2. Módulos Nativos (Nivel 2)
+        </div>
+        <ul class="sidebar-menu">
+          <li class="sidebar-item">
+            <a href="#que-es-modulo" class="sidebar-link">
+              <span>¿Qué es un Módulo Nativo?</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a href="#modulo-pam" class="sidebar-link">
+              <span>PAM (Pregúntale a Meco)</span>
+              <span class="sidebar-tag" style="color:#2dd4bf">pam/</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a href="#modulo-cam" class="sidebar-link">
+              <span>CAM (Conecta a Meco)</span>
+              <span class="sidebar-tag" style="color:#2dd4bf">cam/</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a href="#modulo-sam" class="sidebar-link">
+              <span>SAM (Seguridad y Auditoría)</span>
+              <span class="sidebar-tag" style="color:#38bdf8">sam/</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a href="#modulo-mam" class="sidebar-link">
+              <span>MAM (Memoria y Persistencia)</span>
+              <span class="sidebar-tag" style="color:#38bdf8">mam/</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a href="#modulo-vam" class="sidebar-link">
+              <span>VAM (Vigía Autónomo)</span>
+              <span class="sidebar-tag" style="color:#38bdf8">vam/</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Category 3: Guía de Desarrollo de Módulos Nativos -->
+      <div class="sidebar-category">
+        <div class="sidebar-category-title">
+          <span>🛠️</span> 3. Crear Módulos Nativos
+        </div>
+        <ul class="sidebar-menu">
+          <li class="sidebar-item">
+            <a href="#guia-modulos-estructura" class="sidebar-link">
+              <span>Estructura en modules/</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a href="#guia-modulos-contrato" class="sidebar-link">
+              <span>Contrato de Ciclo de Vida</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a href="#guia-modulos-pasos" class="sidebar-link">
+              <span>Paso a Paso de Implementación</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a href="#guia-modulos-boilerplate" class="sidebar-link">
+              <span>Boilerplate Completo de Módulo</span>
+              <span class="sidebar-tag">Python</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Category 4: Desarrollo de Plugins Desacoplados (Nivel 3) -->
+      <div class="sidebar-category">
+        <div class="sidebar-category-title">
+          <span>🧩</span> 4. Crear Plugins (Meco-Hub)
+        </div>
+        <ul class="sidebar-menu">
+          <li class="sidebar-item">
+            <a href="#plugins-estandar-2bloques" class="sidebar-link">
+              <span>Estándar 2 Bloques (calls ➔ actions)</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a href="#plugins-manifiesto" class="sidebar-link">
+              <span>Manifiesto & Verificación SHA-256</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a href="#plugins-contexto" class="sidebar-link">
+              <span>Aislamiento con MecoContext</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a href="#plugins-boilerplate" class="sidebar-link">
+              <span>Boilerplate Completo de Plugin</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Category 5: Seguridad y Gobernanza de Permisos -->
+      <div class="sidebar-category">
+        <div class="sidebar-category-title">
+          <span>🛡️</span> 5. Gobernanza y Permisos
+        </div>
+        <ul class="sidebar-menu">
+          <li class="sidebar-item">
+            <a href="#permisos-politica" class="sidebar-link">
+              <span>Política Strict Deny</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a href="#permisos-catalogo" class="sidebar-link">
+              <span>Catálogo de Capacidades</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a href="#permisos-auditoria" class="sidebar-link">
+              <span>Auditoría y Modo Búnker</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Category 6: Bus IPC y Comunicaciones -->
+      <div class="sidebar-category">
+        <div class="sidebar-category-title">
+          <span>⚡</span> 6. Bus IPC Inter-Plugins
+        </div>
+        <ul class="sidebar-menu">
+          <li class="sidebar-item">
+            <a href="#ipc-prioridades" class="sidebar-link">
+              <span>Prioridades P1, P2 y P3</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a href="#ipc-eventos" class="sidebar-link">
+              <span>Eventos y Publicación</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+    </aside>
+
+    <!-- CENTER CONTENT: TECHNICAL DOCUMENTATION ARTICLES -->
+    <main class="docs-content">
+      
+      <!-- Breadcrumb Trail -->
+      <div class="breadcrumb-trail">
+        <a href="index.html" class="breadcrumb-link">M.E.C.O.</a>
+        <span>/</span>
+        <span>meco.docs</span>
+        <span>/</span>
+        <span style="color: var(--docs-text);">Manual Técnico de Arquitectura & Desarrollo</span>
+      </div>
+
+      <!-- SECTION 1: INTRODUCCIÓN -->
+      <article id="intro" class="docs-article">
+        <h1 class="docs-h1">Documentación Técnica de M.E.C.O.</h1>
+        <p class="docs-lead">
+          <strong>Microkernel Extensible Controlador y Orquestador</strong> (M.E.C.O.) es un sistema operativo autonómico diseñado bajo principios no negociables de soberanía tecnológica, desacoplamiento estricto en tres niveles, privacidad local absoluta y resiliencia táctica fuera de banda.
+        </p>
+
+        <div class="admonition admonition-important">
+          <div class="admonition-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            Nombre Oficial del Proyecto
+          </div>
+          <p>
+            El acrónimo oficial es <strong>Microkernel Extensible Controlador y Orquestador</strong> (M.E.C.O.). Bajo ninguna circunstancia debe denominarse "Módulo de Enlace Central Organizativo".
+          </p>
+        </div>
+
+        <h2 id="tres-niveles" class="docs-h2">1.2 Los Tres Niveles Arquitectónicos</h2>
+        <p class="docs-p">
+          Para garantizar que una falla catastrófica en un plugin externo jamás tumbe el homelab ni comprometa la autoridad del sistema, M.E.C.O. se divide rígidamente en 3 capas de ejecución:
+        </p>
+
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead>
+              <tr>
+                <th>Nivel</th>
+                <th>Nombre</th>
+                <th>Ubicación</th>
+                <th>Propósito Principal</th>
+                <th>Tolerancia a Fallos</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong style="color: var(--docs-core);">Nivel 1</strong></td>
+                <td><strong>Core Microkernel</strong></td>
+                <td><code>core/</code></td>
+                <td>Autoridad de permisos, supervisor de ciclo de vida y Modo Esquemático Básico.</td>
+                <td><strong>Zero-Failure:</strong> Fichero inmutable, cero dependencias externas.</td>
+              </tr>
+              <tr>
+                <td><strong style="color: var(--docs-modules);">Nivel 2</strong></td>
+                <td><strong>Módulos Nativos</strong></td>
+                <td><code>modules/</code></td>
+                <td>Servicios estructurales internos (PAM, CAM, SAM, MAM, VAM).</td>
+                <td><strong>Crítico:</strong> Empaquetados dentro del repositorio <code>meco-core</code>.</td>
+              </tr>
+              <tr>
+                <td><strong style="color: var(--docs-plugins);">Nivel 3</strong></td>
+                <td><strong>Plugins Desacoplados</strong></td>
+                <td><code>meco-hub (plugins/)</code></td>
+                <td>Extensiones funcionales de usuario (14 plugins oficiales).</td>
+                <td><strong>Aislado:</strong> Circuit breakers individuales; una caída no afecta al Core.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="modulos-vs-plugins" class="docs-h2">1.3 Diferencia Clave: Módulos del Sistema vs Plugins</h2>
+        <p class="docs-p">
+          Esta distinción es fundamental para cualquier desarrollador que contribuya al ecosistema:
+        </p>
+
+        <div class="admonition admonition-note">
+          <div class="admonition-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            Regla de Oro de Desacoplamiento
+          </div>
+          <p>
+            <strong>Los Módulos Nativos</strong> residen dentro del repositorio <code>meco-core</code>, forman la infraestructura esencial del sistema operativo y proveen servicios que los plugins consumen.<br>
+            <strong>Los Plugins</strong> residen en el repositorio desacoplado <code>meco-hub</code>, son 100% intercambiables y jamás se importan de forma estática en el código del Core.
+          </p>
+        </div>
+      </article>
+
+      <!-- SECTION 2: MÓDULOS DEL SISTEMA (NIVEL 2) -->
+      <article id="que-es-modulo" class="docs-article">
+        <h1 class="docs-h1">2. Módulos del Sistema (Nivel 2)</h1>
+        <p class="docs-lead">
+          Los Módulos del Sistema residen en el directorio <code>modules/</code> del repositorio <code>meco-core</code>. Cada módulo tiene un acrónimo exacto, una responsabilidad unívoca y expone una interfaz estructurada para interactuar con el Microkernel.
+        </p>
+
+        <!-- PAM -->
+        <h2 id="modulo-pam" class="docs-h2">
+          <span>PAM — Pregúntale a Meco</span>
+        </h2>
+        <p class="docs-p">
+          <strong>Ubicación:</strong> <code>modules/pam/</code><br>
+          <strong>Responsabilidad:</strong> Interfaz humana, normalización de telemetría y adaptación lingüística en caliente.
+        </p>
+        <p class="docs-p">
+          PAM incorpora el motor <code>ResponseAdapter</code>, el cual traduce las respuestas técnicas emitidas por el Microkernel o por los plugins en 4 perfiles dinámicos según el contexto de la interacción:
+        </p>
+        <ul class="docs-ul">
+          <li class="docs-li"><code>conversational</code>: Lenguaje natural, empático y explicativo para interfaces cliente como Telegram o asistentes de voz.</li>
+          <li class="docs-li"><code>concise</code>: Respuestas telegráficas de una sola línea ideales para notificaciones push en móviles y smartwatches.</li>
+          <li class="docs-li"><code>technical</code>: Muestra latencias exactas, métricas de hardware, consumo de memoria y códigos de retorno UNIX.</li>
+          <li class="docs-li"><code>schematic</code>: Salida pura determinista en ASCII clave-valor sin dependencias, reservada para terminales de emergencia.</li>
+        </ul>
+
+        <!-- CAM -->
+        <h2 id="modulo-cam" class="docs-h2">
+          <span>CAM — Conecta a Meco</span>
+        </h2>
+        <p class="docs-p">
+          <strong>Ubicación:</strong> <code>modules/cam/</code><br>
+          <strong>Responsabilidad:</strong> Gobernanza de tráfico de red externa y Bus IPC inter-plugins.
+        </p>
+        <p class="docs-p">
+          CAM contiene dos subsistemas vitales:
+        </p>
+        <ul class="docs-ul">
+          <li class="docs-li"><code>modules/cam/net.py</code> (NetManager): Aplica la política estricta de dominios permitidos (DNS Whitelist), disyuntores de conexión y detección instantánea de cortes de fibra óptica para aislar el homelab.</li>
+          <li class="docs-li"><code>modules/cam/ipc.py</code> (InterPluginBus): Bus de mensajería asíncrona que permite a los plugins intercambiar eventos y llamadas cruzadas con prioridad P1, P2 o P3 sin acoplar sus bases de código.</li>
+        </ul>
+
+        <!-- SAM -->
+        <h2 id="modulo-sam" class="docs-h2">
+          <span>SAM — Seguridad y Auditoría Meco</span>
+        </h2>
+        <p class="docs-p">
+          <strong>Ubicación:</strong> <code>modules/sam/</code><br>
+          <strong>Responsabilidad:</strong> Gobernanza criptográfica, control de accesos y registro de auditoría inmutable.
+        </p>
+        <p class="docs-p">
+          SAM valida los permisos declarados por cada plugin contra la matriz central <code>config/meco.yaml</code>, verifica las firmas criptográficas SHA-256 de los archivos de código antes de la carga y audita cualquier invocación a subprocesos del kernel de Linux.
+        </p>
+
+        <!-- MAM -->
+        <h2 id="modulo-mam" class="docs-h2">
+          <span>MAM — Memoria y Almacenamiento Meco</span>
+        </h2>
+        <p class="docs-p">
+          <strong>Ubicación:</strong> <code>modules/mam/</code><br>
+          <strong>Responsabilidad:</strong> Gestión del ciclo de vida del almacenamiento persistente y mitigación de fragmentación RAM.
+        </p>
+        <p class="docs-p">
+          Para permitir que MECO funcione de manera continua en servidores de muy bajo consumo (ej. Intel Alder Lake N100 con 6W de TDP), MAM invoca periódicamente llamadas nativas a <code>glibc malloc_trim(0)</code> a través de <code>ctypes</code>, manteniendo el consumo de memoria RSS estrictamente contenido entre 45 MB y 65 MB.
+        </p>
+
+        <!-- VAM -->
+        <h2 id="modulo-vam" class="docs-h2">
+          <span>VAM — Vigía Autónomo Meco</span>
+        </h2>
+        <p class="docs-p">
+          <strong>Ubicación:</strong> <code>modules/vam/</code><br>
+          <strong>Responsabilidad:</strong> Watchdog de disponibilidad, monitor de latencia y failover fuera de banda.
+        </p>
+        <p class="docs-p">
+          VAM vigila los hilos del Microkernel y el estado de salud de cada plugin. Si detecta anomalías repetidas, abre el disyuntor (Circuit Breaker: OPEN) aislando al plugin causante para salvaguardar la estabilidad general del sistema.
+        </p>
+      </article>
+
+      <!-- SECTION 3: GUÍA DE DESARROLLO DE MÓDULOS NATIVOS -->
+      <article id="guia-modulos-estructura" class="docs-article">
+        <h1 class="docs-h1">3. Manual de Creación de Módulos Nativos</h1>
+        <p class="docs-lead">
+          Guía paso a paso para arquitectos de software que necesiten añadir un nuevo servicio estructural al Nivel 2 en <code>meco-core</code>.
+        </p>
+
+        <div class="admonition admonition-warning">
+          <div class="admonition-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            Requisito de Admisión de Módulos Nativos
+          </div>
+          <p>
+            Un componente <strong>SOLO</strong> debe implementarse como Módulo Nativo de Nivel 2 si provee un servicio vital del sistema requerido por múltiples plugins (como seguridad, red, interfaz o almacenamiento). Toda funcionalidad específica de usuario (domótica, bots, finanzas, descargas) debe ir en <code>meco-hub</code> como Plugin de Nivel 3.
+          </p>
+        </div>
+
+        <h2 id="guia-modulos-contrato" class="docs-h2">3.2 Contrato de Ciclo de Vida</h2>
+        <p class="docs-p">
+          Todo módulo nativo debe implementar los siguientes 4 métodos obligatorios para ser gestionado por <code>meco.py</code>:
+        </p>
+
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead>
+              <tr>
+                <th>Método</th>
+                <th>Firma</th>
+                <th>Momento de Ejecución</th>
+                <th>Responsabilidad</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>initialize()</code></td>
+                <td><code>def initialize(self, kernel_ctx) -&gt; bool</code></td>
+                <td>Fase 2 del arranque del Microkernel.</td>
+                <td>Lectura de configuración en <code>config/</code>, asignación de buffers y verificación de prerrequisitos del kernel.</td>
+              </tr>
+              <tr>
+                <td><code>handle_command()</code></td>
+                <td><code>def handle_command(self, cmd: str, args: list) -&gt; dict</code></td>
+                <td>Invocación vía CLI o router PAM.</td>
+                <td>Despacho síncrono del comando y retorno de payload estructurado.</td>
+              </tr>
+              <tr>
+                <td><code>status()</code></td>
+                <td><code>def status(self) -&gt; dict</code></td>
+                <td>Sondeo de salud periódico.</td>
+                <td>Métricas en formato clave-valor consumibles por el Modo Esquemático y telemetría.</td>
+              </tr>
+              <tr>
+                <td><code>shutdown()</code></td>
+                <td><code>def shutdown(self) -&gt; None</code></td>
+                <td>Cierre de MECO o señal SIGTERM.</td>
+                <td>Vaciado de buffers a disco, cierre de sockets y liberación de memoria.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="guia-modulos-pasos" class="docs-h2">3.3 Paso a Paso de Implementación</h2>
+        <ol class="docs-ol">
+          <li class="docs-li">Crear el subdirectorio del módulo en <code>modules/&lt;nombre_modulo&gt;/</code> dentro de <code>meco-core</code>.</li>
+          <li class="docs-li">Crear <code>__init__.py</code> exponiendo la clase gestora del módulo (ej: <code>from .engine import SamEngine</code>).</li>
+          <li class="docs-li">Implementar <code>engine.py</code> heredando el contrato de ciclo de vida e integrando el registrador de eventos de auditoría.</li>
+          <li class="docs-li">Crear <code>cli.py</code> para definir las banderas y subcomandos accesibles desde la consola local.</li>
+          <li class="docs-li">Registrar el módulo en el orquestador maestro <code>meco.py</code> para incluirlo en la secuencia de arranque.</li>
+        </ol>
+
+        <h2 id="guia-modulos-boilerplate" class="docs-h2">3.4 Plantilla Boilerplate Completa</h2>
+        <p class="docs-p">
+          A continuación se presenta el código base listo para producción para crear un nuevo módulo nativo en <code>modules/sam/engine.py</code>:
+        </p>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-filename">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+              </svg>
+              modules/sam/engine.py
+            </span>
+            <button class="copy-button">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              Copiar
+            </button>
+          </div>
+          <pre class="code-content"><code>"""
+M.E.C.O. — Microkernel Extensible Controlador y Orquestador
+Módulo Nativo de Nivel 2: SAM (Seguridad y Auditoría Meco)
+"""
+import time
+import logging
+from typing import Dict, Any, List
+
+class SamModuleEngine:
+    """Módulo estructural de Gobernanza y Auditoría del Sistema."""
+
+    def __init__(self):
+        self.logger = logging.getLogger("meco.modules.sam")
+        self.enabled = False
+        self.events_audited = 0
+        self.started_at = None
+
+    def initialize(self, kernel_ctx: Any) -> bool:
+        """Inicialización de Nivel 2 durante el arranque del Microkernel."""
+        self.logger.info("[SAM:INIT] Inicializando Seguridad y Auditoría...")
+        self.started_at = time.time()
+        self.enabled = True
+        return True
+
+    def handle_command(self, cmd: str, args: List[str]) -> Dict[str, Any]:
+        """Procesa comandos directos enviados desde el enrutador central."""
+        if cmd == "status":
+            return self.status()
+        elif cmd == "audit":
+            self.events_audited += 1
+            return {"status": "ok", "action": "audit_recorded", "count": self.events_audited}
+        return {"error": f"Comando '{cmd}' desconocido en SAM", "code": 404}
+
+    def status(self) -> Dict[str, Any]:
+        """Telemetría estructurada consumida por el Modo Esquemático (Core) y PAM."""
+        return {
+            "module": "sam",
+            "exact_name": "Seguridad y Auditoría Meco",
+            "tier": 2,
+            "status": "nominal" if self.enabled else "disabled",
+            "events_audited": self.events_audited,
+            "uptime_seconds": round(time.time() - self.started_at, 2) if self.started_at else 0
+        }
+
+    def shutdown(self):
+        """Parada ordenada de recursos y vaciado de buffers a disco."""
+        self.logger.info("[SAM:SHUTDOWN] Cierre ordenado de módulo SAM.")
+        self.enabled = False</code></pre>
+        </div>
+      </article>
+
+      <!-- SECTION 4: DESARROLLO DE PLUGINS DESACOPLADOS -->
+      <article id="plugins-estandar-2bloques" class="docs-article">
+        <h1 class="docs-h1">4. Guía de Desarrollo de Plugins (Meco-Hub)</h1>
+        <p class="docs-lead">
+          Los plugins de M.E.C.O. se alojan en <code>meco-hub</code> y extienden la funcionalidad sin acoplar su código fuente al Microkernel. Operan bajo el estándar oficial de 2 bloques.
+        </p>
+
+        <h2 class="docs-h2">4.1 Arquitectura de 2 Bloques: calls.py ➔ actions.py</h2>
+        <p class="docs-p">
+          Cada plugin divide de forma estricta su interfaz pública de su lógica de negocio:
+        </p>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-filename">Estructura Oficial del Plugin en meco-hub</span>
+          </div>
+          <pre class="code-content"><code>plugins/&lt;nombre_plugin&gt;/
+├── calls.py          # Bloque 1: Ventanilla pública (comandos CLI, eventos y endpoints)
+├── actions.py        # Bloque 2: Motor de lógica, llamadas a APIs externas y cálculos
+├── manifest.json     # Metadatos, versión, capacidades solicitadas y SHA-256
+└── README.md         # Documentación de uso para el administrador</code></pre>
+        </div>
+
+        <h2 id="plugins-manifiesto" class="docs-h2">4.2 El Manifiesto manifest.json</h2>
+        <p class="docs-p">
+          Antes de que el Microkernel permita arrancar a un plugin, comprueba su manifiesto y valida los permisos solicitados contra la política del homelab:
+        </p>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-filename">plugins/sentinel/manifest.json</span>
+            <button class="copy-button">Copiar</button>
+          </div>
+          <pre class="code-content"><code>{
+  "id": "sentinel",
+  "name": "Sentinel",
+  "version": "2.0.0",
+  "author": "Iker",
+  "entrypoint": "calls.py:SentinelCalls",
+  "permissions": [
+    "core:admin",
+    "core:storage",
+    "pam:interact",
+    "cam:internet",
+    "system:exec"
+  ],
+  "sha256": "52471422142e874689c4f6a8b26589fee8f83ddc85b06158d45adeec19aa3a96"
+}</code></pre>
+        </div>
+
+        <h2 id="plugins-contexto" class="docs-h2">4.3 Aislamiento con MecoContext</h2>
+        <p class="docs-p">
+          El Microkernel inyecta en cada plugin una instancia aislada de <code>MecoContext</code>. A través de este contexto, el plugin puede solicitar interactuar con los módulos nativos (ej: <code>ctx.pam.adapt()</code> o <code>ctx.cam.fetch()</code>). Si el plugin intenta realizar una acción sin contar con el permiso firmado correspondiente, el Microkernel intercepta y deniega la operación con un error criptográfico sin detener la ejecución de otros plugins.
+        </p>
+      </article>
+
+      <!-- SECTION 5: GOBERNANZA Y PERMISOS CRIPTOGRÁFICOS -->
+      <article id="permisos-politica" class="docs-article">
+        <h1 class="docs-h1">5. Gobernanza y Permisos Criptográficos</h1>
+        <p class="docs-lead">
+          La seguridad de M.E.C.O. se basa en el principio de <strong>Mínimo Privilegio Absoluto</strong> y política <strong>Strict Deny por Defecto</strong>.
+        </p>
+
+        <h2 id="permisos-catalogo" class="docs-h2">5.2 Catálogo de Capacidades del Sistema</h2>
+        <div class="docs-table-wrap">
+          <table class="docs-table">
+            <thead>
+              <tr>
+                <th>Capacidad</th>
+                <th>Módulo Supervisor</th>
+                <th>Descripción y Alcance</th>
+                <th>Nivel de Riesgo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>core:admin</code></td>
+                <td>Core (Nivel 1)</td>
+                <td>Control del ciclo de vida del kernel y reinicio de servicios.</td>
+                <td><span style="color:var(--docs-rose); font-weight:700">Crítico</span></td>
+              </tr>
+              <tr>
+                <td><code>system:exec</code></td>
+                <td>SAM (Nivel 2)</td>
+                <td>Ejecución de binarios y subprocesos en el sistema operativo Linux.</td>
+                <td><span style="color:var(--docs-rose); font-weight:700">Crítico</span></td>
+              </tr>
+              <tr>
+                <td><code>cam:internet</code></td>
+                <td>CAM (Nivel 2)</td>
+                <td>Salida a Internet mediante HTTP/HTTPS filtrada por whitelist DNS.</td>
+                <td><span style="color:var(--docs-core); font-weight:700">Medio</span></td>
+              </tr>
+              <tr>
+                <td><code>cam:ipc</code></td>
+                <td>CAM (Nivel 2)</td>
+                <td>Publicación y escucha de mensajes en el Bus IPC inter-plugins.</td>
+                <td><span style="color:var(--docs-core); font-weight:700">Bajo-Medio</span></td>
+              </tr>
+              <tr>
+                <td><code>pam:interact</code></td>
+                <td>PAM (Nivel 2)</td>
+                <td>Adaptación de textos y diálogos conversacionales dirigidos al usuario.</td>
+                <td><span style="color:var(--docs-emerald); font-weight:700">Bajo</span></td>
+              </tr>
+              <tr>
+                <td><code>core:storage</code></td>
+                <td>MAM (Nivel 2)</td>
+                <td>Escritura y lectura en almacenamiento persistente y bases SQLite.</td>
+                <td><span style="color:var(--docs-core); font-weight:700">Medio</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <!-- SECTION 6: BUS IPC Y COMUNICACIONES -->
+      <article id="ipc-prioridades" class="docs-article">
+        <h1 class="docs-h1">6. Bus IPC Inter-Plugins</h1>
+        <p class="docs-lead">
+          El módulo <strong>CAM</strong> gestiona el bus de comunicación interna para que los plugins colaboren en tiempo real manteniendo el desacoplamiento total.
+        </p>
+
+        <h2 class="docs-h2">6.1 Niveles de Prioridad en el Bus IPC</h2>
+        <ul class="docs-ul">
+          <li class="docs-li"><strong>P1 (Prioridad Crítica):</strong> Eventos de intrusión, caída de hardware, activación de trampas canario anti-ransomware y modo búnker. Se procesan de forma inmediata en cabeza de cola.</li>
+          <li class="docs-li"><strong>P2 (Prioridad Interactiva):</strong> Comandos del usuario, interacciones por Telegram, peticiones de la PWA o respuestas del asistente de voz.</li>
+          <li class="docs-li"><strong>P3 (Prioridad de Fondo / Telemetría):</strong> Sincronización rclone a la nube, limpieza de caché, recolección de métricas térmicas y backups periódicos.</li>
+        </ul>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-filename">Ejemplo de emisión de evento crítico en el Bus IPC</span>
+            <button class="copy-button">Copiar</button>
+          </div>
+          <pre class="code-content"><code># Un plugin de seguridad dispara una alerta P1 que escucharán Telegram y Ntfy
+ctx.cam.bus.publish(
+    event="security:canary_tripped",
+    payload={"path": "/storage/docs/canary.pdf", "timestamp": time.time()},
+    priority=1
+)</code></pre>
+        </div>
+      </article>
+
+    </main>
+
+    <!-- RIGHT SIDEBAR: ON THIS PAGE (TOC) -->
+    <aside class="docs-toc">
+      <div class="toc-title">En esta página</div>
+      <ul class="toc-menu">
+        <li class="toc-item"><a href="#intro" class="toc-link active">Introducción</a></li>
+        <li class="toc-item"><a href="#tres-niveles" class="toc-link">Tres Niveles</a></li>
+        <li class="toc-item"><a href="#modulos-vs-plugins" class="toc-link">Módulos vs Plugins</a></li>
+        <li class="toc-item"><a href="#que-es-modulo" class="toc-link">Módulos del Sistema</a></li>
+        <li class="toc-item"><a href="#modulo-pam" class="toc-link">PAM (Pregúntale)</a></li>
+        <li class="toc-item"><a href="#modulo-cam" class="toc-link">CAM (Conecta)</a></li>
+        <li class="toc-item"><a href="#modulo-sam" class="toc-link">SAM (Seguridad)</a></li>
+        <li class="toc-item"><a href="#modulo-mam" class="toc-link">MAM (Memoria)</a></li>
+        <li class="toc-item"><a href="#modulo-vam" class="toc-link">VAM (Vigía)</a></li>
+        <li class="toc-item"><a href="#guia-modulos-estructura" class="toc-link">Crear Módulos</a></li>
+        <li class="toc-item"><a href="#guia-modulos-contrato" class="toc-link">Contrato de Ciclo</a></li>
+        <li class="toc-item"><a href="#guia-modulos-boilerplate" class="toc-link">Boilerplate Módulo</a></li>
+        <li class="toc-item"><a href="#plugins-estandar-2bloques" class="toc-link">Crear Plugins</a></li>
+        <li class="toc-item"><a href="#permisos-politica" class="toc-link">Permisos Criptográficos</a></li>
+        <li class="toc-item"><a href="#ipc-prioridades" class="toc-link">Bus IPC y Prioridades</a></li>
+      </ul>
+    </aside>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="docs-footer">
+    <p>
+      M.E.C.O. (Microkernel Extensible Controlador y Orquestador) &copy; 2026. Documentación técnica oficial bajo principios de soberanía tecnológica y código abierto.
+    </p>
+  </footer>
+
+  <script src="docs.js"></script>
+</body>
+</html>
